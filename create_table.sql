@@ -29,6 +29,7 @@ CREATE TABLE BettingCard
 (
     Id         BIGSERIAL NOT NULL,
     TotalMoney bigint,
+    DebitCardId bigint    NOT NULL,
     PRIMARY KEY (Id)
 );
 CREATE TABLE BettingCoefficients
@@ -68,7 +69,7 @@ CREATE TABLE DebitCard
     Issue            bigint,
     DateOfExpire     date,
     "Column"         bigint,
-    "Betting CardId" bigint    NOT NULL,
+--     "Betting CardId" bigint    NOT NULL,
     PRIMARY KEY (Id)
 );
 CREATE TABLE Judge
@@ -108,7 +109,7 @@ CREATE TABLE Player
     Id         BIGSERIAL NOT NULL,
     person_id  bigint    not null references Person (id),
     TeamId     bigint    NOT NULL,
-    PositionId bigint    NOT NULL,
+    PositionId text    NOT NULL,
     LocationId bigint    NOT NULL,
     PRIMARY KEY (Id)
 );
@@ -130,7 +131,7 @@ CREATE TABLE Season
 (
     Id             BIGSERIAL NOT NULL,
     Name           text,
-    Country        text,
+    Country        bigint not null references Location(id),
     "Year started" date,
     LeagueId       bigint    NOT NULL,
     PRIMARY KEY (Id)
@@ -244,3 +245,10 @@ ALTER TABLE Player_Team
     ADD CONSTRAINT FKPlayer_Tea896953 FOREIGN KEY (PlayerId) REFERENCES Player (Id);
 ALTER TABLE Player_Team
     ADD CONSTRAINT FKPlayer_Tea797403 FOREIGN KEY (TeamId) REFERENCES Team (Id);
+
+
+create table TeamNames
+(
+    Id   BIGSERIAL NOT NULL PRIMARY KEY,
+    Name text
+);

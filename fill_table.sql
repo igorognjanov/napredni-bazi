@@ -1741,3 +1741,16 @@ VALUES
     ('HB Tórshavn'),
     ('KÍ Klaksvík'),
     ('NSÍ Runavík');
+
+
+INSERT INTO Stadium (Name, Location)
+SELECT name, location
+FROM (
+         SELECT unnest(
+                        ARRAY['San Siro', 'Old Trafford', 'Santiago Bernabeu', 'Camp Nou', 'Allianz Arena', 'Emirates Stadium', 'Anfield', 'Etihad Stadium']
+                    ) AS name,
+                unnest(
+                        ARRAY['Milan, Italy', 'Manchester, England', 'Madrid, Spain', 'Barcelona, Spain', 'Munich, Germany', 'London, England', 'Liverpool, England', 'Manchester, England']
+                    ) AS location
+     ) AS s
+ORDER BY random()
