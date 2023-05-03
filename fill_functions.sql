@@ -344,8 +344,9 @@ select fill_user_data(100);
 select * from "User";
 
 
-
 select * from season;
+
+
 
 
 
@@ -379,6 +380,94 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-select fill_betting_coefficients_data(100)
+select fill_betting_coefficients_data(100);
 select * from bettingcoefficients
 
+
+
+
+CREATE OR REPLACE FUNCTION fill_data_season()
+    RETURNS VOID AS
+$$
+DECLARE
+    l_id bigint;
+    i    int;
+BEGIN
+    FOR l_id IN (select id from league)
+        LOOP
+            for i in 1980..2022
+                loop
+                    insert into season("Year started", leagueid)
+                    values (i::text, l_id);
+                end loop;
+        end loop;
+end;
+$$ LANGUAGE plpgsql;
+
+select fill_data_season();
+select * from season;
+
+
+CREATE OR REPLACE FUNCTION fill_data_team_season()
+    RETURNS VOID AS
+$$
+DECLARE
+    team   RECORD;
+    season record;
+    i      int;
+BEGIN
+    FOR team IN (select * from team)
+        LOOP
+            for season in (select * from season where LeagueId = team.league_id)
+                loop
+                    insert into team_season(teamid, seasonid)
+                    values (team.id, season.id);
+                end loop;
+        end loop;
+end;
+$$ LANGUAGE plpgsql;
+
+select fill_data_team_season();
+select * from team_season;
+
+
+select * from team;
+select * from season;
+select * from league;
+
+
+insert into bettingcombinations(name)
+values ('1'),
+       ('x'),
+       ('2'),
+       ('1-1'),
+       ('2-2'),
+       ('x-x'),
+       ('x-1'),
+       ('x-x'),
+       ('1-x'),
+       ('1-2'),
+       ('2-1'),
+       ('2-2'),
+       ('2-x');
+
+
+
+CREATE OR REPLACE FUNCTION fill_betting_coefficients_data(num_rows integer)
+    RETURNS void AS $$
+BEGIN
+    FOR i IN 1..num_rows LOOP
+            INSERT INTO BettingCoefficients (Coefficient, State, MatchesId, BettingCombinationsId)
+            VALUES (
+                       round(RANDOM() * 10 + 1, 2)::text,
+                       'NOT YET PLAYED',
+                       (SELECT id FROM Matches ORDER BY RANDOM() LIMIT 1),
+                       (SELECT id FROM BettingCombinations ORDER BY RANDOM() LIMIT 1)
+                   );
+        END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+
+select fill_betting_coefficients_data(100);
+select * from bettingcoefficients;

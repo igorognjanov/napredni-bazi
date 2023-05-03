@@ -45,7 +45,6 @@ CREATE TABLE BettingCombinations
 (
     Id                    BIGSERIAL NOT NULL,
     Name                  text,
-    BettingCoefficientsId bigint    NOT NULL,
     PRIMARY KEY (Id)
 );
 CREATE TABLE Coach
@@ -130,9 +129,7 @@ CREATE TABLE Role
 CREATE TABLE Season
 (
     Id             BIGSERIAL NOT NULL,
-    Name           text,
-    Country        bigint not null references Location(id),
-    "Year started" date,
+    "Year started" text,
     LeagueId       bigint    NOT NULL,
     PRIMARY KEY (Id)
 );
@@ -219,8 +216,6 @@ ALTER TABLE DebitCard
     ADD CONSTRAINT FKDebitCard219565 FOREIGN KEY ("Betting CardId") REFERENCES BettingCard (Id);
 ALTER TABLE TiketBet
     ADD CONSTRAINT FKTiketBet355195 FOREIGN KEY (TiketId) REFERENCES Tiket (Id);
-ALTER TABLE TiketBet
-    ADD CONSTRAINT FKTiketBet122048 FOREIGN KEY (BettingCoefficientsId) REFERENCES BettingCoefficients (Id);
 ALTER TABLE BettingCoefficients
     ADD CONSTRAINT FKBettingCoe364559 FOREIGN KEY (MatchesId) REFERENCES Matches (Id);
 ALTER TABLE Matches
