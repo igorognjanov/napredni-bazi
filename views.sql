@@ -1,4 +1,4 @@
-create or replace view matches as
+create or replace view matches_view as
 select m.id          as id,
        th.name       as homeTeam,
        ta.name       as awayTeam,
@@ -14,7 +14,7 @@ from matches m
          join person jp on j.person_id = jp.id;
 
 
-create or replace view tickets as
+create or replace view tickets_view as
 select t.id           as id,
        bc.coefficient as coefficient,
        th.name        as homeTeam,
@@ -25,8 +25,8 @@ select t.id           as id,
 from tiket t
          join tiketbet bt on t.id = bt.tiketid
          join "User" u on t.userid = u.id
-         join bettingcoefficients bc on bt."Betting coefficient" = bc.id
-         join BettingCombinations bcm on bc.BettingCombinationsId = bcm.id
+         join bettingcoefficients bc on bt.bettingcoefficientsid = bc.id
+         join BettingCombinations bcm on bc.bettingcombinationsid = bcm.id
          join matches m on m.id = bc.matchesid
          join team th on th.id = m.hometeam
          join team ta on ta.id = m.awayteam;
@@ -63,8 +63,6 @@ from Player p
 
 create or replace view seasons as
 select s.id             as id,
-       s.name           as name,
-       s.country        as country,
        s."Year started" as year_started,
        l.name           as legue_name
 from season s
@@ -121,7 +119,7 @@ select t.id       as id,
        t.odd      as odd,
        t.stake    as stake
 from "User" u
-         join tiket t on u.username = t.userid
+         join tiket t on u.id = t.userid
          join tiketbet tb on t.id = tiketid
          join bettingcoefficients b on tb.bettingcoefficientsid = b.id
-group by t.id;
+group by t.id, u.username;
