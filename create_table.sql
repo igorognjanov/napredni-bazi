@@ -29,6 +29,7 @@ CREATE TABLE BettingCard
 (
     Id         BIGSERIAL NOT NULL,
     TotalMoney bigint,
+    DebitCardId bigint    NOT NULL,
     PRIMARY KEY (Id)
 );
 CREATE TABLE BettingCoefficients
@@ -44,7 +45,6 @@ CREATE TABLE BettingCombinations
 (
     Id                    BIGSERIAL NOT NULL,
     Name                  text,
-    BettingCoefficientsId bigint    NOT NULL,
     PRIMARY KEY (Id)
 );
 CREATE TABLE Coach
@@ -68,7 +68,7 @@ CREATE TABLE DebitCard
     Issue            bigint,
     DateOfExpire     date,
     "Column"         bigint,
-    "Betting CardId" bigint    NOT NULL,
+--     "Betting CardId" bigint    NOT NULL,
     PRIMARY KEY (Id)
 );
 CREATE TABLE Judge
@@ -108,7 +108,7 @@ CREATE TABLE Player
     Id         BIGSERIAL NOT NULL,
     person_id  bigint    not null references Person (id),
     TeamId     bigint    NOT NULL,
-    PositionId bigint    NOT NULL,
+    PositionId text    NOT NULL,
     LocationId bigint    NOT NULL,
     PRIMARY KEY (Id)
 );
@@ -129,9 +129,7 @@ CREATE TABLE Role
 CREATE TABLE Season
 (
     Id             BIGSERIAL NOT NULL,
-    Name           text,
-    Country        text,
-    "Year started" date,
+    "Year started" text,
     LeagueId       bigint    NOT NULL,
     PRIMARY KEY (Id)
 );
@@ -218,8 +216,6 @@ ALTER TABLE DebitCard
     ADD CONSTRAINT FKDebitCard219565 FOREIGN KEY ("Betting CardId") REFERENCES BettingCard (Id);
 ALTER TABLE TiketBet
     ADD CONSTRAINT FKTiketBet355195 FOREIGN KEY (TiketId) REFERENCES Tiket (Id);
-ALTER TABLE TiketBet
-    ADD CONSTRAINT FKTiketBet122048 FOREIGN KEY (BettingCoefficientsId) REFERENCES BettingCoefficients (Id);
 ALTER TABLE BettingCoefficients
     ADD CONSTRAINT FKBettingCoe364559 FOREIGN KEY (MatchesId) REFERENCES Matches (Id);
 ALTER TABLE Matches
@@ -244,3 +240,10 @@ ALTER TABLE Player_Team
     ADD CONSTRAINT FKPlayer_Tea896953 FOREIGN KEY (PlayerId) REFERENCES Player (Id);
 ALTER TABLE Player_Team
     ADD CONSTRAINT FKPlayer_Tea797403 FOREIGN KEY (TeamId) REFERENCES Team (Id);
+
+
+create table TeamNames
+(
+    Id   BIGSERIAL NOT NULL PRIMARY KEY,
+    Name text
+);
