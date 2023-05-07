@@ -164,8 +164,8 @@ CREATE TABLE Team_Season
 CREATE TABLE Tiket
 (
     Id       BIGSERIAL NOT NULL,
-    Stake    text,
-    "Return" text,
+    Stake    bigint,
+    "Return" bigint,
     Odd      text,
     State    text,
     UserId   bigint    NOT NULL,
@@ -174,7 +174,6 @@ CREATE TABLE Tiket
 CREATE TABLE TiketBet
 (
     Id                    BIGSERIAL NOT NULL,
-    "Betting coefficient" text,
     TiketId               bigint    NOT NULL,
     BettingCoefficientsId bigint    NOT NULL,
     PRIMARY KEY (Id)
@@ -212,8 +211,8 @@ ALTER TABLE "User"
     ADD CONSTRAINT FKUser349727 FOREIGN KEY (RoleId) REFERENCES Role (Id);
 ALTER TABLE "User"
     ADD CONSTRAINT FKUser237501 FOREIGN KEY ("Betting CardId") REFERENCES BettingCard (Id);
-ALTER TABLE DebitCard
-    ADD CONSTRAINT FKDebitCard219565 FOREIGN KEY ("Betting CardId") REFERENCES BettingCard (Id);
+-- ALTER TABLE DebitCard
+--     ADD CONSTRAINT FKDebitCard219565 FOREIGN KEY ("Betting CardId") REFERENCES BettingCard (Id);
 ALTER TABLE TiketBet
     ADD CONSTRAINT FKTiketBet355195 FOREIGN KEY (TiketId) REFERENCES Tiket (Id);
 ALTER TABLE BettingCoefficients
@@ -240,6 +239,8 @@ ALTER TABLE Player_Team
     ADD CONSTRAINT FKPlayer_Tea896953 FOREIGN KEY (PlayerId) REFERENCES Player (Id);
 ALTER TABLE Player_Team
     ADD CONSTRAINT FKPlayer_Tea797403 FOREIGN KEY (TeamId) REFERENCES Team (Id);
+ALTER TABLE TiketBet
+    ADD CONSTRAINT FKPlayer_Tea334342 FOREIGN KEY (BettingCoefficientsId) REFERENCES BettingCoefficients (Id);
 
 
 create table TeamNames
