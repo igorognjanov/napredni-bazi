@@ -391,8 +391,6 @@ $$ LANGUAGE plpgsql;
 select fill_betting_coefficients_data();
 select * from bettingcoefficients;
 
-drop function fill_betting_coefficients_data;
-
 
 CREATE OR REPLACE FUNCTION fill_data_season()
     RETURNS VOID AS
