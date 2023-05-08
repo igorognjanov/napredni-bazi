@@ -377,7 +377,7 @@ BEGIN
             for match_id in (select id from matches) loop
                     INSERT INTO BettingCoefficients (Coefficient, State, MatchesId, BettingCombinationsId)
                     VALUES (
-                               TRUNC((RANDOM() * 10 + 1)::numeric, 2)::text,
+                               TRUNC((RANDOM() * 10 + 1)::numeric, 2),
                                (CASE TRUNC((RANDOM() * 2 + 1)::numeric, 0) WHEN 1 THEN 'Active' ELSE 'Inactive' END),
                                match_id,
                                combination_id
@@ -464,7 +464,7 @@ BEGIN
     FOR i IN 1..num_rows LOOP
             INSERT INTO BettingCoefficients (Coefficient, State, MatchesId, BettingCombinationsId)
             VALUES (
-                       round((RANDOM() * 10 + 1)::numeric, 2)::text,
+                       round((RANDOM() * 10 + 1)::numeric, 2),
                        'NOT YET PLAYED',
                        (SELECT id FROM Matches ORDER BY RANDOM() LIMIT 1),
                        (SELECT id FROM BettingCombinations ORDER BY RANDOM() LIMIT 1)
@@ -507,7 +507,7 @@ BEGIN
             insert into tiket(stake, "Return", odd, state, userid)
             select random() * 10000 + 10,
                    0,
-                   '',
+                   1,
                    (CASE TRUNC((RANDOM() * 2 + 1)::numeric, 0) WHEN 1 THEN 'Won' ELSE 'Lost' END),
                    (select id from "User" order by random() limit 1);
         END LOOP;
@@ -515,8 +515,9 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-select fill_tiket_data(100);
+select fill_tiket_data(10000);
 select * from tiket;
+truncate tiket cascade ;
 
 --=====================================
 
@@ -530,7 +531,7 @@ BEGIN
     FOR tiket_id IN (select id from tiket)
         LOOP
             insert into tiketbet(tiketid, bettingcoefficientsid)
-            select tiket_id, id from bettingcoefficients order by random() limit round(random() * 15 + 4);
+            select tiket_id, id from bettingcoefficients order by random() limit round(random() * 3 + 4);
         END LOOP;
 END;
 $$ LANGUAGE plpgsql;
@@ -538,11 +539,62 @@ $$ LANGUAGE plpgsql;
 
 select fill_tiket_bet_data();
 select * from tiketbet;
+truncate tiketbet;
+
+
+
+
+create or replace function on_tiket_bet_insert() returns trigger AS $$
+declare
+    total_coefficient   decimal;
+    coef                decimal;
+    gain                bigint;
+    total               bigint;
+begin
+    coef              := (select coefficient from bettingcoefficients where id = new.bettingcoefficientsid);
+    total_coefficient := round((select odd from tiket where id = new.tiketid) * coef, 2);
+    total             := total_coefficient * (select stake from tiket where id = new.tiketid);
+    gain              := total - round(total * 0.18);
+    update tiket set odd = total_coefficient, "Return" = gain where id = new.tiketid;
+    return new;
+end;
+$$ language plpgsql;
+
+create trigger on_tiket_bet_insert before insert on tiketbet
+    for each row execute function on_tiket_bet_insert();
+
+drop trigger on_tiket_bet_insert on tiketbet;
 
 
 
 
 
 
-
-
+-- create or replace function on_tiket_bet_delete() returns trigger AS $$
+-- declare
+--     total_coefficient   decimal;
+--     coef                decimal;
+--     gain                bigint;
+--     total               bigint;
+-- begin
+--     coef              := (select coefficient from bettingcoefficients where id = old.bettingcoefficientsid);
+--     total_coefficient := round((select odd from tiket where id = old.tiketid) / coef, 2);
+--     total             := total_coefficient * (select stake from tiket where id = old.tiketid);
+--     gain              := total - round(total * 0.18);
+--     update tiket set odd = total_coefficient, "Return" = gain where id = old.tiketid;
+--     return old;
+-- end;
+-- $$ language plpgsql;
+--
+-- create trigger on_tiket_bet_delete before delete on tiketbet
+--     for each row execute function on_tiket_bet_delete();
+--
+-- drop trigger on_tiket_bet_delete on tiketbet;
+--
+--
+-- delete from tiketbet where id = 1109903;
+--
+-- insert into tiketbet(tiketid, bettingcoefficientsid)
+-- values (1000001, 51);
+--
+-- select * from tiket where id = 1000001;

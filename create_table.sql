@@ -35,7 +35,7 @@ CREATE TABLE BettingCard
 CREATE TABLE BettingCoefficients
 (
     Id                    BIGSERIAL NOT NULL,
-    Coefficient           text,
+    Coefficient           decimal,
     State                 text,
     MatchesId             bigint    NOT NULL,
     BettingCombinationsId bigint    NOT NULL,
@@ -166,7 +166,7 @@ CREATE TABLE Tiket
     Id       BIGSERIAL NOT NULL,
     Stake    bigint,
     "Return" bigint,
-    Odd      text,
+    Odd      decimal,
     State    text,
     UserId   bigint    NOT NULL,
     PRIMARY KEY (Id)
