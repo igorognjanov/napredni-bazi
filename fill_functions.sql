@@ -388,7 +388,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-select fill_betting_coefficients_data(100);
+select fill_betting_coefficients_data();
 select * from bettingcoefficients;
 
 drop function fill_betting_coefficients_data;
