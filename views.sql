@@ -6,7 +6,7 @@ select m.id                  as id,
        m.result              as result,
        jp.first_name         as judge,
        m."Date"              as date,
-       l.name                as season,
+       l.name                as league,
        season."Year started" as league_year
 from matches m
          join team th on m.hometeam = th.id
@@ -18,7 +18,7 @@ from matches m
          join league l on season.leagueid = l.id;
 
 
-create or replace view tickets_view as
+create or replace view ticket_bet_view as
 select t.id           as id,
        bc.coefficient as coefficient,
        th.name        as homeTeam,
