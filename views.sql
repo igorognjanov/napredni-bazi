@@ -1,17 +1,21 @@
 create or replace view matches_view as
-select m.id          as id,
-       th.name       as homeTeam,
-       ta.name       as awayTeam,
-       s.name        as stadium,
-       m.result      as result,
-       jp.first_name as judge,
-       m."Date"      as date
+select m.id                  as id,
+       th.name               as homeTeam,
+       ta.name               as awayTeam,
+       s.name                as stadium,
+       m.result              as result,
+       jp.first_name         as judge,
+       m."Date"              as date,
+       l.name                as season,
+       season."Year started" as league_year
 from matches m
          join team th on m.hometeam = th.id
          join team ta on m.awayteam = ta.id
          join stadium s on s.id = th.stadiumid
          join judge j on j.id = m.judgeid
-         join person jp on j.person_id = jp.id;
+         join person jp on j.person_id = jp.id
+         join season on m.seasonid = season.id
+         join league l on season.leagueid = l.id;
 
 
 create or replace view tickets_view as
@@ -53,8 +57,10 @@ select p.id              as id,
        per.first_name    as first_name,
        per.last_name     as last_name,
        per.date_of_birth as date_of_birth,
-       t.name            as team_name,
-       l.country         as country
+       l.country         as country,
+       t.name            as name,
+       pt."From"         as "from",
+       pt."To"           as "to"
 from Player p
          join Person per on p.person_id = per.id
          join Location l on l.id = per.location_id
