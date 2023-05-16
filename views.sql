@@ -19,7 +19,7 @@ from matches m
 
 
 create or replace view ticket_bet_view as
-select t.id           as id,
+select t.id           as ticketId,
        bc.coefficient as coefficient,
        th.name        as homeTeam,
        ta.name        as awayTeam,
@@ -59,6 +59,7 @@ select p.id              as id,
        per.date_of_birth as date_of_birth,
        l.country         as country,
        t.name            as name,
+       t.id              as team_id,
        pt."From"         as "from",
        pt."To"           as "to"
 from Player p
@@ -90,15 +91,19 @@ from bettingcoefficients b
          join team th on m.awayteam = th.id;
 
 create or replace view teams as
-select t.id    as id,
-       t.name  as name,
-       lo.city as locaton,
-       l.name  as league,
-       s.name  as stadium
+select t.id                  as id,
+       t.name                as name,
+       lo.city               as locaton,
+       l.name                as league,
+       s.name                as stadium,
+       season."Year started" as year_league,
+       l.id                  as league_id
 from team t
-         join league l on t.league_id = l.id
          join location lo on t.location_id = lo.id
-         join stadium s on t.stadiumid = s.id;
+         join stadium s on t.stadiumid = s.id
+         join team_season ts on t.id = ts.teamid
+         join season on ts.seasonid = season.id
+         join league l on season.leagueid = l.id;
 
 create or replace view coaches as
 select c.id         as id,
@@ -121,11 +126,11 @@ create or replace view tikets_status as
 select t.id       as id,
        t.state    as state,
        u.username as username,
+       u.id       as user_id,
        t."Return" as return,
        t.odd      as odd,
        t.stake    as stake
 from "User" u
          join tiket t on u.id = t.userid
          join tiketbet tb on t.id = tiketid
-         join bettingcoefficients b on tb.bettingcoefficientsid = b.id
-group by t.id, u.username;
+         join bettingcoefficients b on tb.bettingcoefficientsid = b.id;
