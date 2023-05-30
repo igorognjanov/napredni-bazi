@@ -616,25 +616,13 @@ execute function on_tiket_bet_delete();
 
 create or replace function on_betting_coefficient_update() returns trigger AS
 $$
-declare
-    total_coefficient decimal;
-    odd               decimal;
-    gain              bigint;
-    total             bigint;
-    ticket            record;
 begin
-
-    for ticket in (select t.*
-                   from tiketbet
-                            join tiket t on tiketbet.tiketid = t.id
-                   where bettingcoefficientsid = old.id)
-        loop
-            odd := ticket.odd;
-            total_coefficient := round(((odd / old.coefficient) * new.coefficient), 2);
-            total := total_coefficient * ticket.stake;
-            gain := total - round(total * 0.18);
-            update tiket set odd = total_coefficient, "Return" = gain where id = ticket.id;
-        end loop;
+    update tiket
+    set odd      = round(((odd / old.coefficient) * new.coefficient), 2),
+        "Return" = odd * stake * 0.82 -- 18% tax
+    where id in (select distinct tiketid
+                 from tiketbet
+                 where bettingcoefficientsid = old.id);
     return new;
 end;
 $$ language plpgsql;
@@ -645,7 +633,8 @@ create trigger on_betting_coefficient_update
     for each row
 execute function on_betting_coefficient_update();
 
--- drop trigger on_betting_coefficient_update on bettingcoefficients;
+drop trigger on_betting_coefficient_update on bettingcoefficients;
+
 
 
 -- create or replace function on_matches_update() returns trigger AS
@@ -654,6 +643,7 @@ execute function on_betting_coefficient_update();
 --     ticket     record;
 --     ticket_bet record;
 --     ticket_won boolean;
+--     result     text;
 -- begin
 --     if (old.result != new.result)
 --     then
@@ -664,10 +654,20 @@ execute function on_betting_coefficient_update();
 --                                 join tiket t on tb.tiketid = t.id
 --                        where matchesid = old.id)
 --             loop
+--                 ticket_won := true;
 --                 for ticket_bet in (select * from tiketbet where tiketid = ticket.id)
 --                     loop
---                         if ()
+--                         result := (select m.result
+--                                    from bettingcoefficients bc
+--                                             join matches m on m.id = bc.matchesid
+--                                    where bc.id = ticket_bet.bettingcoefficientsid);
+--                         case when (result = 'Home Team Wins') then
+--                             when (result = 'Away Team Wins') then
+--                             when (result = 'Draw') then ''
+--                             end
 --                     end loop;
+--                 update tiket set state = ''
+--
 --             end loop;
 --     end if;
 -- end;
