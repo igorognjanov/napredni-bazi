@@ -8,12 +8,12 @@ BEGIN
 END
 $$;
 
-CREATE OR REPLACE FUNCTION insert_ticket_function(p_stake text, p_return text, p_odd text, p_state text, p_userid int)
+CREATE OR REPLACE FUNCTION insert_ticket_function(p_stake text, p_return text, p_odd text, p_userid int)
     RETURNS VOID AS
 $$
 BEGIN
     insert into tiket(stake, "Return", odd, state, userid)
-    values (p_stake, p_return, p_odd, p_state, p_userid);
+    values (p_stake, p_return, p_odd, 'Created', p_userid);
 END
 $$;
 

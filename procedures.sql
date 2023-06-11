@@ -1,11 +1,28 @@
-CREATE PROCEDURE ticket_bets_search(ticket BIGSERIAL)
+CREATE PROCEDURE ticket_bets_search(ticketid BIGINT)
     LANGUAGE SQL
 AS
 $$
+update tiket
+    set state = (select count(case
+                 when (m.result = 'Home Team Wins' and bc.name not like '%1') then true
+                 when (m.result = 'Away Team Wins' and bc.name not like '%2') then true
+                 when (m.result = 'Draw' and bc.name not like '%x') then true
+    end) = 0 from tiketbet tb
+                      join bettingcoefficients b on tb.bettingcoefficientsid = b.id
+                      join matches m on b.matchesid = m.id
+                      join bettingcombinations bc on b.bettingcombinationsid = bc.id
+where tiketid = ticketid)
+    where id = ticketid;
 
-SELECT *
-FROM ticket_bet_view as tb
-WHERE tb.ticketId = ticket;
+
+
+    select * from tiket;
+CALL ticket_bets_search(1387592);
+
+--
+-- SELECT *
+-- FROM ticket_bet_view as tb
+-- WHERE tb.ticketId = ticket;
 
 $$;
 

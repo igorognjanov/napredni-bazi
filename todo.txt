@@ -1,4 +1,5 @@
-1-> edna funkcija za koga ke dojde klient za isplata da se updatira tiketstatus, i dali tiket e isplaten(dodadi vo baza)
+1-> edna funkcija za koga ke dojde klient za isplata da se updatira tiketstatus, i dali tiket e
+isplaten(dodadi vo baza)
 1-> koga ke dobie tiket da mu se uplatat pari na karticka(zaedno so prvata)
 2-> koga ke vrsi uplata da se zemat pari od karticka
 4-> da moze da vidime tiketi po username koj gi uplatil
