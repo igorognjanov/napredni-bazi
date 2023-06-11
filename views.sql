@@ -87,7 +87,8 @@ from bettingcoefficients b
          join bettingcombinations bc on b.bettingcombinationsid = bc.id
          join matches m on b.matchesid = m.id
          join team ta on m.awayteam = ta.id
-         join team th on m.hometeam = th.id;
+         join team th on m.hometeam = th.id
+order by date desc;
 
 create or replace view teams as
 select t.id                  as id,
