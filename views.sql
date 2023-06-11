@@ -59,7 +59,6 @@ select p.id              as id,
        per.date_of_birth as date_of_birth,
        l.country         as country,
        t.name            as name,
-       t.id              as team_id,
        pt."From"         as "from",
        pt."To"           as "to"
 from Player p
