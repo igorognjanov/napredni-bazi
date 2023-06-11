@@ -19,7 +19,7 @@ from matches m
 
 
 create or replace view ticket_bet_view as
-select t.id           as ticketId,
+select t.id           as id,
        bc.coefficient as coefficient,
        th.name        as homeTeam,
        ta.name        as awayTeam,
