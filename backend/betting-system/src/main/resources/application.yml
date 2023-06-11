@@ -5,7 +5,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/napredni-bazi
+    url: jdbc:postgresql://localhost:5432/napredni_bazi
     username: postgres
     password: postgres
 
