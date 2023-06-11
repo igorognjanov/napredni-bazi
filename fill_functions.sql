@@ -203,7 +203,7 @@ BEGIN
         LOOP
             INSERT INTO Matches (Result, JudgeId, StadiumId, SeasonId, HomeTeam, AwayTeam, "Date")
             SELECT CASE floor(random() * 3)
-                       WHEN 0 THEN 'Home Team Wins'
+                       WHEN 0 THEN 'Home Team W`ins'
                        WHEN 1 THEN 'Away Team Wins'
                        WHEN 2 THEN 'Draw'
                        END,
