@@ -19,7 +19,7 @@ from matches m
 
 
 create or replace view ticket_bet_view as
-select t.id           as ticketId,
+select t.id           as id,
        bc.coefficient as coefficient,
        th.name        as homeTeam,
        ta.name        as awayTeam,
@@ -59,7 +59,6 @@ select p.id              as id,
        per.date_of_birth as date_of_birth,
        l.country         as country,
        t.name            as name,
-       t.id              as team_id,
        pt."From"         as "from",
        pt."To"           as "to"
 from Player p
@@ -88,16 +87,16 @@ from bettingcoefficients b
          join bettingcombinations bc on b.bettingcombinationsid = bc.id
          join matches m on b.matchesid = m.id
          join team ta on m.awayteam = ta.id
-         join team th on m.awayteam = th.id;
+         join team th on m.hometeam = th.id
+order by date desc;
 
 create or replace view teams as
 select t.id                  as id,
        t.name                as name,
-       lo.city               as locaton,
+       lo.city               as location,
        l.name                as league,
        s.name                as stadium,
-       season."Year started" as year_league,
-       l.id                  as league_id
+       season."Year started" as year_league
 from team t
          join location lo on t.location_id = lo.id
          join stadium s on t.stadiumid = s.id
