@@ -7,7 +7,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/napredni_bazi
     username: postgres
-    password: postgres
+    password: password
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
