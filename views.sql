@@ -97,7 +97,6 @@ select t.id                  as id,
        l.name                as league,
        s.name                as stadium,
        season."Year started" as year_league
-
 from team t
          join location lo on t.location_id = lo.id
          join stadium s on t.stadiumid = s.id

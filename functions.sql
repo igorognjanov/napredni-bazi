@@ -17,12 +17,22 @@ BEGIN
 END
 $$;
 
-CREATE OR REPLACE FUNCTION insert_bet_function(p_coefficiten text, p_state text, p_match int, p_combination int)
+CREATE OR REPLACE FUNCTION insert_bet_function(p_coefficiten text,  p_state int, p_match int, p_combination int)
     RETURNS VOID AS
 $$
 BEGIN
-    insert into tiketbet(Coefficient, State, MatchesId, BettingCombinationsId)
+    insert into bettingcoefficients(coefficient, state, matchesid, bettingcombinationsid)
     values (p_coefficiten, p_state, p_match, p_combination);
+END
+$$;
+
+CREATE OR REPLACE FUNCTION change_bet_function(p_betId text, p_state text)
+    RETURNS VOID AS
+$$
+BEGIN
+    update bettingcoefficients
+    set state=p_state
+    where id=p_betId;
 END
 $$;
 
@@ -43,5 +53,14 @@ BEGIN
     VALUES (p_username, p_password, (select id from person where last_name = p_last_name and first_name = p_first_name),
             p_locationId, p_roleId,
             (select id from bettingcard where debitcardid = (select id from debitcard where issue = p_cardIssue)));
+END
+$$;
+
+CREATE OR REPLACE FUNCTION insert_match_function(p_judgeid int, p_stadiumid int, p_seasonid int, p_hometeam int, p_awayteam int, p_date date)
+    RETURNS VOID AS
+$$
+BEGIN
+    insert into matches (result, judgeid, stadiumid, seasonid, hometeam, awayteam, "Date")
+    values ("",p_judgeid, p_stadiumid, p_seasonid, p_hometeam, p_awayteam, p_date);
 END
 $$;
