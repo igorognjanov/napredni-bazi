@@ -130,6 +130,4 @@ select t.id       as id,
        t.odd      as odd,
        t.stake    as stake
 from "User" u
-         join tiket t on u.id = t.userid
-         join tiketbet tb on t.id = tiketid
-         join bettingcoefficients b on tb.bettingcoefficientsid = b.id;
+         join tiket t on u.id = t.userid;
