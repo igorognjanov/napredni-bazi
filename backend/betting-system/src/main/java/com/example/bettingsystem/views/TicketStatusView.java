@@ -1,9 +1,7 @@
 package com.example.bettingsystem.views;
 
 import com.example.bettingsystem.model.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(schema = "public", name = "tikets_status")

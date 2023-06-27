@@ -1,13 +1,16 @@
 package com.example.bettingsystem.views;
 
 import com.example.bettingsystem.model.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.databind.ser.Serializers;
+import jakarta.persistence.*;
 
 @Entity
 @Table(schema = "public", name = "matches_view")
-public class MatchesView extends BaseEntity {
+public class MatchesView {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
 
     @Column(name = "hometeam")
     public String homeTeam;

@@ -6,7 +6,8 @@ BEGIN
     insert into matches(result, judgeid, stadiumid, seasonid, hometeam, awayteam, "Date")
     values (p_result, p_judgeId, p_stadiumId, p_seasonId, p_homeTeamId, p_awayTeamId, p_date);
 END
-$$;
+$$
+    LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION insert_ticket_function(p_stake text, p_return text, p_odd text, p_userid int)
     RETURNS VOID AS
@@ -15,16 +16,18 @@ BEGIN
     insert into tiket(stake, "Return", odd, state, userid)
     values (p_stake, p_return, p_odd, 'Created', p_userid);
 END
-$$;
+$$
+    LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION insert_bet_function(p_coefficiten text,  p_state int, p_match int, p_combination int)
+CREATE OR REPLACE FUNCTION insert_bet_function(p_coefficiten text, p_state int, p_match int, p_combination int)
     RETURNS VOID AS
 $$
 BEGIN
     insert into bettingcoefficients(coefficient, state, matchesid, bettingcombinationsid)
     values (p_coefficiten, p_state, p_match, p_combination);
 END
-$$;
+$$
+    LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION change_bet_function(p_betId text, p_state text)
     RETURNS VOID AS
@@ -32,9 +35,10 @@ $$
 BEGIN
     update bettingcoefficients
     set state=p_state
-    where id=p_betId;
+    where id = p_betId;
 END
-$$;
+$$
+    LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION insert_user_function(p_first_name text, p_last_name text, p_date_of_birth date, p_email text,
                                                 p_location_id int,
@@ -54,13 +58,16 @@ BEGIN
             p_locationId, p_roleId,
             (select id from bettingcard where debitcardid = (select id from debitcard where issue = p_cardIssue)));
 END
-$$;
+$$
+    LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION insert_match_function(p_judgeid int, p_stadiumid int, p_seasonid int, p_hometeam int, p_awayteam int, p_date date)
+CREATE OR REPLACE FUNCTION insert_match_function(p_judgeid int, p_stadiumid int, p_seasonid int, p_hometeam int,
+                                                 p_awayteam int, p_date date)
     RETURNS VOID AS
 $$
 BEGIN
     insert into matches (result, judgeid, stadiumid, seasonid, hometeam, awayteam, "Date")
-    values ("",p_judgeid, p_stadiumid, p_seasonid, p_hometeam, p_awayteam, p_date);
+    values (null, p_judgeid, p_stadiumid, p_seasonid, p_hometeam, p_awayteam, p_date);
 END
-$$;
+$$
+    LANGUAGE plpgsql;

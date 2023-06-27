@@ -1,22 +1,27 @@
 CREATE PROCEDURE ticket_bets_search(ticketid BIGINT)
-    LANGUAGE SQL
+    LANGUAGE plpgsql
 AS
 $$
-update tiket
+BEGIN
+    update tiket
     set state = (select count(case
-                 when (m.result = 'Home Team Wins' and bc.name not like '%1') then true
-                 when (m.result = 'Away Team Wins' and bc.name not like '%2') then true
-                 when (m.result = 'Draw' and bc.name not like '%x') then true
-    end) = 0 from tiketbet tb
-                      join bettingcoefficients b on tb.bettingcoefficientsid = b.id
-                      join matches m on b.matchesid = m.id
-                      join bettingcombinations bc on b.bettingcombinationsid = bc.id
-where tiketid = ticketid)
+                                  when (m.result = 'Home Team Wins' and bc.name not like '%1') then true
+                                  when (m.result = 'Away Team Wins' and bc.name not like '%2') then true
+                                  when (m.result = 'Draw' and bc.name not like '%x') then true
+        end) = 0
+                 from tiketbet tb
+                          join bettingcoefficients b on tb.bettingcoefficientsid = b.id
+                          join matches m on b.matchesid = m.id
+                          join bettingcombinations bc on b.bettingcombinationsid = bc.id
+                 where tiketid = ticketid)
     where id = ticketid;
+END
+$$;
 
 
 
-    select * from tiket;
+select *
+from tiket;
 CALL ticket_bets_search(1387592);
 
 --

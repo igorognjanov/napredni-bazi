@@ -1,15 +1,18 @@
 package com.example.bettingsystem.views;
 
 import com.example.bettingsystem.model.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(schema = "public", name = "bets")
 public class BetsView extends BaseEntity {
+
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
+    private Long id;
 
     @Column(name = "home_team")
     public String homeTeam;

@@ -5,11 +5,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MatchesViewComponent } from './matches-view/matches-view.component';
 import {HttpClientModule} from "@angular/common/http";
+import { TiketsStatusComponent } from './tikets-status/tikets-status.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MatchesViewComponent
+    MatchesViewComponent,
+    TiketsStatusComponent
   ],
   imports: [
     BrowserModule,
