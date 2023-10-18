@@ -20,20 +20,41 @@ from matches m
 
 create or replace view ticket_bet_view as
 select t.id           as id,
-       bc.coefficient as coefficient,
+       b.coefficient as coefficient,
        th.name        as homeTeam,
        ta.name        as awayTeam,
        m."Date"       as date,
        bcm.name       as combination,
        u.username     as username
 from tiket t
-         join tiketbet bt on t.id = bt.tiketid
+         join tiketbet tb on t.id = tb.tiketid
          join "User" u on t.userid = u.id
-         join bettingcoefficients bc on bt.bettingcoefficientsid = bc.id
-         join BettingCombinations bcm on bc.bettingcombinationsid = bcm.id
-         join matches m on m.id = bc.matchesid
-         join team th on th.id = m.hometeam
-         join team ta on ta.id = m.awayteam;
+         join bettingcoefficients b on tb.bettingcoefficientsid = b.id
+         join matches m on b.matchesid = m.id
+         join team ta on m.awayteam = ta.id
+         join team th on m.hometeam = th.id
+         join bettingcombinations bcm on b.bettingcombinationsid = bcm.id;
+
+select * from tiketbet where tiketid = 687778
+
+-- create or replace view ticket_bet_view as
+select *
+--        bc.coefficient as coefficient,
+--        th.name        as homeTeam,
+--        ta.name        as awayTeam,
+--        m."Date"       as date,
+--        bcm.name       as combination,
+--        u.username     as username
+from tiket t
+         join tiketbet tb on t.id = tb.tiketid
+         join bettingcoefficients b on tb.bettingcoefficientsid = b.id
+         join matches m on b.matchesid = m.id
+         join team t2 on m.awayteam = t2.id
+         join team t3 on m.hometeam = t3.id;
+
+select * from team where id in (91179,84417, 65209,76900, 88944,11889)
+
+select * from matches where id in (17132, 18462, 19280)
 
 create or replace view users as
 select u.id            as id,

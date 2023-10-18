@@ -6,12 +6,14 @@ import { AppComponent } from './app.component';
 import { MatchesViewComponent } from './matches-view/matches-view.component';
 import {HttpClientModule} from "@angular/common/http";
 import { TiketsStatusComponent } from './tikets-status/tikets-status.component';
+import { TicketBetComponent } from './ticket-bet/ticket-bet.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MatchesViewComponent,
-    TiketsStatusComponent
+    TiketsStatusComponent,
+    TicketBetComponent
   ],
   imports: [
     BrowserModule,

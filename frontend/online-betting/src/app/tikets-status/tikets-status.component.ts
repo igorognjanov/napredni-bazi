@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ServiceService} from "../service.service";
+import {NavigationExtras, Route, Router} from "@angular/router";
 
 @Component({
   selector: 'app-tikets-status',
@@ -10,7 +11,8 @@ export class TiketsStatusComponent implements OnInit {
   data: any[] = [];
 
 
-  constructor(private service: ServiceService) {
+  constructor(private service: ServiceService,
+              private router:Router) {
   }
 
   ngOnInit(): void {
@@ -19,6 +21,10 @@ export class TiketsStatusComponent implements OnInit {
         this.data = matches.content;
       }
     );
+  }
+
+  openTiket(tiketId: number) {
+    this.router.navigate(['/tiket-bets', tiketId]);
   }
 
 

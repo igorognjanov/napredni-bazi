@@ -22,7 +22,7 @@ $$;
 
 select *
 from tiket;
-CALL ticket_bets_search(1387592);
+CALL ticket_bets_search(409409);
 
 --
 -- SELECT *

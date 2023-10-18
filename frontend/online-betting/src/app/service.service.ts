@@ -18,6 +18,9 @@ export class ServiceService {
     return this.http.get<any>('api/ticket-status');
   }
 
+  openTiket(tiketId: number){
+    return this.http.get<any>(`api/ticket-bets-search/${tiketId}`)
+  }
 
 
 }
