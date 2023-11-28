@@ -5,15 +5,18 @@ import com.example.bettingsystem.views.*;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
 @CrossOrigin("https://localhost:8080")
 public class BetsViewController {
 
+    public TicketBetRepository ticketBetRepository;
     public BetsViewRepository betsViewRepository;
     public CoachesViewRepository coachesViewRepository;
     public JudgesViewRepository judgesViewRepository;
@@ -35,7 +38,8 @@ public class BetsViewController {
             TeamsViewRepository teamsViewRepository,
             TicketBetViewRepository ticketBetViewRepository,
             TicketStatusViewRepository ticketStatusViewRepository,
-            UserViewRepository userViewRepository
+            UserViewRepository userViewRepository,
+            TicketBetRepository ticketBetRepository
     ) {
         this.betsViewRepository = betsViewRepository;
         this.coachesViewRepository = coachesViewRepository;
@@ -47,12 +51,21 @@ public class BetsViewController {
         this.ticketBetViewRepository = ticketBetViewRepository;
         this.ticketStatusViewRepository = ticketStatusViewRepository;
         this.userViewRepository = userViewRepository;
+        this.ticketBetRepository = ticketBetRepository;
     }
 
     @GetMapping("/matches")
     public Page<MatchesView> getAllMatches(@RequestParam(defaultValue = "1") int page) {
         return matchesRepository.findAll(PageRequest.of(page, 50));
     }
+
+    @GetMapping("/matches/team/{team}")
+    public Page<MatchesView> getAllMatchesForTeam(@PathVariable(value = "team") String team,
+                                                  @RequestParam(defaultValue = "1") int page) {
+        Pageable pageable = PageRequest.of(page - 1, 50); // Subtract 1 from page because it is 0-based
+        return matchesRepository.findAllByHomeTeamLikeOrAwayTeamLike(team, team, pageable);
+    }
+
 
     @GetMapping("/coaches")
     public Page<CoachesView> getAllCoaches(@RequestParam(defaultValue = "1") int page) {
@@ -100,10 +113,11 @@ public class BetsViewController {
     }
 
     @GetMapping("/ticket-bets-search/{id}")
-    @Transactional
     public List<TicketBetView> getTicketBetsForTiket(@PathVariable("id") Long id) {
-//        ticketBetViewRepository.ticketBetsSearchProcedure(id);
-        return ticketBetViewRepository.getAllByIds(id);
+        ticketBetViewRepository.callTicketBetsSearch(id);
+        List<TicketBet> ticketBets = ticketBetRepository.findByTiketId(id);
+        List<Long> tiketBetIds = ticketBets.stream().map(TicketBet::getId).toList();
+        return ticketBetViewRepository.findAllByTiketIdIn(tiketBetIds);
     }
 
 }

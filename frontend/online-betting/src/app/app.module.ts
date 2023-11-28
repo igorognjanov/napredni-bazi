@@ -1,26 +1,39 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { MatchesViewComponent } from './matches-view/matches-view.component';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {MatchesViewComponent} from './matches-view/matches-view.component';
 import {HttpClientModule} from "@angular/common/http";
-import { TiketsStatusComponent } from './tikets-status/tikets-status.component';
-import { TicketBetComponent } from './ticket-bet/ticket-bet.component';
+import {TiketsStatusComponent} from './tikets-status/tikets-status.component';
+import {TicketBetComponent} from './ticket-bet/ticket-bet.component';
+import {HomeComponent} from './home/home.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {PaginationComponent} from './pagination/pagination.component';
+import {FormsModule} from "@angular/forms";
+import { NavComponent } from './nav/nav.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MatchesViewComponent,
     TiketsStatusComponent,
-    TicketBetComponent
+    TicketBetComponent,
+    HomeComponent,
+    PaginationComponent,
+    NavComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatPaginatorModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

@@ -1,0 +1,9 @@
+<div class="pagination-container">
+  <button class="pagination-button" (click)="prevPage()" [disabled]="currentPage === 1">
+    <i class="fa fa-chevron-left"></i> Previous
+  </button>
+  <span class="pagination-info">Page {{ currentPage }}</span>
+  <button class="pagination-button" (click)="nextPage()">
+    Next <i class="fa fa-chevron-right"></i>
+  </button>
+</div>

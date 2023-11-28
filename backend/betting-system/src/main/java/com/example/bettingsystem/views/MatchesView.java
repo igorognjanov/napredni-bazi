@@ -4,6 +4,7 @@ import com.example.bettingsystem.model.BaseEntity;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import jakarta.persistence.*;
 
+
 @Entity
 @Table(schema = "public", name = "matches_view")
 public class MatchesView {

@@ -7,7 +7,14 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(schema = "public", name = "ticket_bet_view")
-public class TicketBetView extends BaseEntity {
+public class TicketBetView {
+
+    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    @Column(name = "tiket_id")
+    public Long tiketId;
 
     @Column(name = "coefficient")
     public Double coefficient;
@@ -24,7 +31,7 @@ public class TicketBetView extends BaseEntity {
     @Column(name = "combination")
     public String combination;
 
-    @Column(name = "username")
-    public String username;
+//    @Column(name = "username")
+//    public String username;
 
 }

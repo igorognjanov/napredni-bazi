@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ServiceService} from "../service.service";
-import {NavigationExtras, Route, Router} from "@angular/router";
+import {ActivatedRoute, NavigationExtras, ParamMap, Route, Router} from "@angular/router";
+import {switchMap} from "rxjs/operators";
+import {PaginationService} from "../pagination.service";
+import {EMPTY} from "rxjs";
 
 @Component({
   selector: 'app-tikets-status',
@@ -9,18 +12,33 @@ import {NavigationExtras, Route, Router} from "@angular/router";
 })
 export class TiketsStatusComponent implements OnInit {
   data: any[] = [];
-
+  searchUsername: string = '';
+  page: number = 1;
 
   constructor(private service: ServiceService,
-              private router:Router) {
+              private router: Router,
+              private paginationService: PaginationService,
+              private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-    this.service.getAllTicketStatuses().subscribe(
-      matches => {
-        this.data = matches.content;
-      }
-    );
+    this.route.queryParamMap
+      .pipe(
+        switchMap((params: ParamMap | null) => {
+          const pageParam = params?.get('page');
+          const page = pageParam ? +pageParam : 1;
+          this.page = page;
+          this.paginationService.setCurrentPage(page);
+          if (this.searchUsername) {
+            return EMPTY;
+          } else {
+            return this.service.getAllTicketStatuses(page);
+          }
+        })
+      )
+      .subscribe((tikets) => {
+        this.data = tikets.content;
+      });
   }
 
   openTiket(tiketId: number) {

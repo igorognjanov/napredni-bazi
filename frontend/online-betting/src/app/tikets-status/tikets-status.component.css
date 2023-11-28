@@ -11,3 +11,25 @@ div[ngFor] {
   font-size: 16px;
   color: #333;
 }
+
+/* Center the search input and make it take half of the row */
+input[type="text"] {
+  padding: 8px;
+  margin: 10px auto;
+  width: 50%;
+  display: block;
+}
+
+/* Style the ticket display div */
+div {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 5px auto;
+  cursor: pointer;
+  width: 100%; /* Set the width to 100% to take the full width of the container */
+}
+
+/* Add hover effect on the ticket display */
+div:hover {
+  background-color: #f5f5f5;
+}

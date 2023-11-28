@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -10,15 +10,22 @@ export class ServiceService {
   constructor(private http: HttpClient) {
   }
 
-  getMatches(): Observable<any> {
-    return this.http.get<any>('api/matches');
+  getMatches(page: number): Observable<any> {
+    const params = new HttpParams().set('page', page.toString());
+    return this.http.get<any>(`api/matches`, {params});
   }
 
-  getAllTicketStatuses(): Observable<any> {
-    return this.http.get<any>('api/ticket-status');
+  getMatchesForTeam(team: string, page: number): Observable<any> {
+    const params = new HttpParams().set('page', page.toString());
+    return this.http.get<any>(`api/matches/${team}`, {params});
   }
 
-  openTiket(tiketId: number){
+  getAllTicketStatuses(page:number): Observable<any> {
+    const params = new HttpParams().set('page', page.toString());
+    return this.http.get<any>(`api/ticket-status`,{params});
+  }
+
+  openTiket(tiketId: number) {
     return this.http.get<any>(`api/ticket-bets-search/${tiketId}`)
   }
 

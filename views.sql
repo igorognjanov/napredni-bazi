@@ -18,22 +18,48 @@ from matches m
          join league l on season.leagueid = l.id;
 
 
+-- drop view ticket_bet_view;
+-- create or replace view ticket_bet_view as
+-- select row_number() over () as id,
+--        t.id                 as tiket_id,
+--        b.coefficient        as coefficient,
+--        th.name              as homeTeam,
+--        ta.name              as awayTeam,
+--        m."Date"             as date,
+--        bcm.name             as combination
+-- from tiket t
+--          join tiketbet tb on t.id = tb.tiketid
+--          join bettingcoefficients b on tb.bettingcoefficientsid = b.id
+--          join matches m on b.matchesid = m.id
+--          join team ta on m.awayteam = ta.id
+--          join team th on m.hometeam = th.id
+--          join bettingcombinations bcm on b.bettingcombinationsid = bcm.id;
+
+select * from ticket_bet_view;
 create or replace view ticket_bet_view as
-select t.id           as id,
-       b.coefficient as coefficient,
-       th.name        as homeTeam,
-       ta.name        as awayTeam,
-       m."Date"       as date,
-       bcm.name       as combination,
-       u.username     as username
-from tiket t
-         join tiketbet tb on t.id = tb.tiketid
-         join "User" u on t.userid = u.id
+select
+       tb.id as id,
+       t.id                 as tiket_id,
+       b.coefficient        as coefficient,
+       th.name              as homeTeam,
+       ta.name              as awayTeam,
+       m."Date"             as date,
+       bcm.name             as combination
+-- from tiket t
+--          join tiketbet tb on t.id = tb.tiketid
+    from tiketbet tb join tiket t on tb.id = t.id
          join bettingcoefficients b on tb.bettingcoefficientsid = b.id
          join matches m on b.matchesid = m.id
          join team ta on m.awayteam = ta.id
          join team th on m.hometeam = th.id
          join bettingcombinations bcm on b.bettingcombinationsid = bcm.id;
+
+
+
+--- REPLACE TICKET BET VIEW WITH 2DIFF VIEWS
+
+---
+
 
 select * from tiketbet where tiketid = 687778
 
@@ -107,8 +133,8 @@ select b.id          as id,
 from bettingcoefficients b
          join bettingcombinations bc on b.bettingcombinationsid = bc.id
          join matches m on b.matchesid = m.id
-            join team th on m.hometeam = th.id
-            join team ta on m.awayteam = ta.id
+         join team th on m.hometeam = th.id
+         join team ta on m.awayteam = ta.id
 order by date desc;
 
 create or replace view teams as
@@ -151,4 +177,5 @@ select t.id       as id,
        t.odd      as odd,
        t.stake    as stake
 from "User" u
-         join tiket t on u.id = t.userid;
+         join tiket t on u.id = t.userid
+order by id asc;

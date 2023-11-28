@@ -1,3 +1,24 @@
-<div *ngFor="let match of data">
-  {{match.homeTeam}}&nbsp; vs &nbsp; {{match.awayTeam}}&nbsp; - &nbsp; {{match.result}}
+<!-- In your component's HTML file -->
+<div class="search-container">
+  <input type="text" placeholder="Search by team" [(ngModel)]="searchTerm" />
+  <button (click)="search()">Search</button>
 </div>
+
+
+<div class="match-grid">
+  <div class="match-container" *ngFor="let match of data">
+    <div class="teams">
+      <span class="home-team">{{ match.homeTeam }}</span>
+      <span class="vs">vs</span>
+      <span class="away-team">{{ match.awayTeam }}</span>
+    </div>
+    <div class="result">{{ match.result }}</div>
+    <div class="details">
+      <span class="date">{{ match.date }}</span>
+      <span class="league">{{ match.league }}</span>
+    </div>
+  </div>
+</div>
+
+
+<app-pagination [currentPage]="page"></app-pagination>
