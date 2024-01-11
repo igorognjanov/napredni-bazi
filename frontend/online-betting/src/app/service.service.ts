@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {Coach, Judge, MatchRequest, Season, Stadium, Team, TicketRequest} from "./interface/interface";
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +30,36 @@ export class ServiceService {
     return this.http.get<any>(`api/ticket-bets-search/${tiketId}`)
   }
 
+  getAllJudges(): Observable<any>{
+    return this.http.get<any>(`api/judges-list`)
+  }
+
+  getAllCoaches(): Observable<any>{
+    return this.http.get<any>(`api/coaches-list`)
+  }
+
+  getAllTeams(): Observable<any>{
+    return this.http.get<any>(`api/teams-list`)
+  }
+
+  getAllSeasons(): Observable<any>{
+    return this.http.get<any>(`api/seasons-list`)
+  }
+
+  getAllStadiums(): Observable<any>{
+    return this.http.get<any>(`api/stadium-list`)
+  }
+
+  getAllBets(): Observable<any>{
+    return this.http.get<any>(`api/bets`)
+  }
+  // judge,stadium, seasson, homeTeam,awayTeam, date
+  saveMatch(request:MatchRequest){
+  return this.http.post<any>(`api/match`,request)
+}
+
+  saveTicket(request:TicketRequest){
+  return this.http.post<any>(`api/ticket`,request)
+}
 
 }

@@ -1,17 +1,14 @@
 package com.example.bettingsystem.views;
 
-import com.example.bettingsystem.model.BaseEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(schema = "public", name = "bets")
-public class BetsView extends BaseEntity {
+public class BetsView {
 
     @Id
-    @GeneratedValue
-    @Column(name = "id")
     private Long id;
 
     @Column(name = "home_team")
@@ -35,4 +32,7 @@ public class BetsView extends BaseEntity {
     @Column(name = "date")
     public LocalDateTime date;
 
+    public Long getId() {
+        return id;
+    }
 }

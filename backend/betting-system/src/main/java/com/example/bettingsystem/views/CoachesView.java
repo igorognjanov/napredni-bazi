@@ -1,13 +1,12 @@
 package com.example.bettingsystem.views;
 
-import com.example.bettingsystem.model.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(schema = "public", name = "coaches")
-public class CoachesView extends BaseEntity {
+public class CoachesView {
+    @Id
+    private Long id;
 
     @Column(name = "first_name")
     public String firstName;
@@ -18,4 +17,7 @@ public class CoachesView extends BaseEntity {
     @Column(name = "team")
     public String teamName;
 
+    public Long getId() {
+        return id;
+    }
 }

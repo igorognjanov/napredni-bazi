@@ -11,8 +11,10 @@ import {HomeComponent} from './home/home.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {PaginationComponent} from './pagination/pagination.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { NavComponent } from './nav/nav.component';
+import {MatchesCreateComponent} from "./matches-create/matches-create.component";
+import {TicketCreateComponent} from "./ticket-create/ticket-create.component";
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { NavComponent } from './nav/nav.component';
     TicketBetComponent,
     HomeComponent,
     PaginationComponent,
-    NavComponent
+    NavComponent,
+    MatchesCreateComponent,
+    TicketCreateComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +34,8 @@ import { NavComponent } from './nav/nav.component';
     HttpClientModule,
     BrowserAnimationsModule,
     MatPaginatorModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

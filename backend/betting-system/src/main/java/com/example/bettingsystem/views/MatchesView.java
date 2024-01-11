@@ -1,7 +1,5 @@
 package com.example.bettingsystem.views;
 
-import com.example.bettingsystem.model.BaseEntity;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import jakarta.persistence.*;
 
 
@@ -10,7 +8,6 @@ import jakarta.persistence.*;
 public class MatchesView {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
     @Column(name = "hometeam")
@@ -37,4 +34,7 @@ public class MatchesView {
     @Column(name = "league_year")
     public String leagueYear;
 
+    public Long getId() {
+        return id;
+    }
 }

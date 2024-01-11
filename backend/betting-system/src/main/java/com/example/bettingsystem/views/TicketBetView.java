@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 public class TicketBetView {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
     @Column(name = "tiket_id")
@@ -34,4 +33,7 @@ public class TicketBetView {
 //    @Column(name = "username")
 //    public String username;
 
+    public Long getId() {
+        return id;
+    }
 }

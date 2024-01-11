@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 public class TicketBet {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "tiketid", nullable = false)

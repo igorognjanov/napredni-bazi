@@ -1,8 +1,9 @@
 package com.example.bettingsystem.controller;
 
 import com.example.bettingsystem.repository.*;
+import com.example.bettingsystem.request.MatchRequest;
+import com.example.bettingsystem.request.TicketRequest;
 import com.example.bettingsystem.views.*;
-import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin("https://localhost:8080")
+@CrossOrigin("https://localhost:8081")
 public class BetsViewController {
 
     public TicketBetRepository ticketBetRepository;
@@ -27,6 +28,7 @@ public class BetsViewController {
     public TicketBetViewRepository ticketBetViewRepository;
     public TicketStatusViewRepository ticketStatusViewRepository;
     public UserViewRepository userViewRepository;
+    public StadiumViewRepository stadiumViewRepository;
 
     public BetsViewController(
             BetsViewRepository betsViewRepository,
@@ -39,7 +41,8 @@ public class BetsViewController {
             TicketBetViewRepository ticketBetViewRepository,
             TicketStatusViewRepository ticketStatusViewRepository,
             UserViewRepository userViewRepository,
-            TicketBetRepository ticketBetRepository
+            TicketBetRepository ticketBetRepository,
+            StadiumViewRepository stadiumViewRepository
     ) {
         this.betsViewRepository = betsViewRepository;
         this.coachesViewRepository = coachesViewRepository;
@@ -52,12 +55,28 @@ public class BetsViewController {
         this.ticketStatusViewRepository = ticketStatusViewRepository;
         this.userViewRepository = userViewRepository;
         this.ticketBetRepository = ticketBetRepository;
+        this.stadiumViewRepository = stadiumViewRepository;
     }
 
     @GetMapping("/matches")
     public Page<MatchesView> getAllMatches(@RequestParam(defaultValue = "1") int page) {
         return matchesRepository.findAll(PageRequest.of(page, 50));
     }
+
+    @PostMapping("/match")
+    public void saveMatch(@RequestBody MatchRequest request) {
+        matchesRepository.insertMatchFunction(request.judge,request.stadium, request.season, request.homeTeam,request.awayTeam, request.date);
+    }
+
+    @PostMapping("/ticket")
+    public void saveTicket(@RequestBody TicketRequest request) {
+        Integer tiketId = ticketBetRepository.insertTicketFunction(request.stake,0,0,5);
+        for (Integer bet :
+                request.bets) {
+            ticketBetRepository.insertTicketBetFunction(tiketId,bet);
+        }
+    }
+
 
     @GetMapping("/matches/team/{team}")
     public Page<MatchesView> getAllMatchesForTeam(@PathVariable(value = "team") String team,
@@ -97,6 +116,35 @@ public class BetsViewController {
         return teamsViewRepository.findAll(PageRequest.of(page, 50));
     }
 
+    @GetMapping("/teams-list")
+    public Page<TeamsView> getAllTeamsList() {
+        Pageable pageable = PageRequest.of(1, 10);
+        return teamsViewRepository.findAll(pageable);
+    }
+
+    @GetMapping("/judges-list")
+    public Page<JudgesView> getAllJudgesList() {
+        Pageable pageable = PageRequest.of(1, 10);
+        return judgesViewRepository.findAll(pageable);
+    }
+
+    @GetMapping("/coaches-list")
+    public Page<CoachesView> getAllCoachesList() {
+        Pageable pageable = PageRequest.of(1, 10);
+        return coachesViewRepository.findAll(pageable);
+    }
+
+    @GetMapping("/seasons-list")
+    public Page<SeasonsView> getAllSeasonList() {
+        Pageable pageable = PageRequest.of(1, 10);
+        return seasonsViewRepository.findAll(pageable);
+    }
+    @GetMapping("/stadium-list")
+    public Page<StadiumView> getAllStadiumList() {
+        Pageable pageable = PageRequest.of(1, 10);
+        return stadiumViewRepository.findAll(pageable);
+    }
+
     @GetMapping("/ticket-bets")
     public Page<TicketBetView> getAllTicketBets(@RequestParam(defaultValue = "1") int page) {
         return ticketBetViewRepository.findAll(PageRequest.of(page, 50));
@@ -116,7 +164,7 @@ public class BetsViewController {
     public List<TicketBetView> getTicketBetsForTiket(@PathVariable("id") Long id) {
         ticketBetViewRepository.callTicketBetsSearch(id);
         List<TicketBet> ticketBets = ticketBetRepository.findByTiketId(id);
-        List<Long> tiketBetIds = ticketBets.stream().map(TicketBet::getId).toList();
+        List<Long> tiketBetIds = ticketBets.stream().map(TicketBet::getId).collect(Collectors.toList());
         return ticketBetViewRepository.findAllByTiketIdIn(tiketBetIds);
     }
 

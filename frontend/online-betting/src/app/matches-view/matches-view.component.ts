@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import { ServiceService } from '../service.service';
 import { PaginationService } from '../pagination.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import {FormsModule} from "@angular/forms";
 
@@ -18,7 +18,8 @@ export class MatchesViewComponent implements OnInit {
   constructor(
     private service: ServiceService,
     private paginationService: PaginationService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -46,5 +47,13 @@ export class MatchesViewComponent implements OnInit {
     this.service.getMatchesForTeam(this.searchTerm, this.page).subscribe((matches) => {
       this.data = matches.content;
     });
+  }
+
+  addMatch() {
+    this.router.navigate(["/matches-create"])
+  }
+
+  addTicket() {
+    this.router.navigate(["/ticket-create"])
   }
 }

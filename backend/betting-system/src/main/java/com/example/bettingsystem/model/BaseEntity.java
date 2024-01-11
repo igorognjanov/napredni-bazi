@@ -2,7 +2,7 @@ package com.example.bettingsystem.model;
 
 import jakarta.persistence.*;
 
-@MappedSuperclass
+@Entity
 public class BaseEntity {
 
     @Id

@@ -1,0 +1,48 @@
+<!--<form>-->
+<!--  <select>-->
+<!--    -->
+<!--  </select>-->
+<!--  <input type="text" formControlName="homeTeam">-->
+<!--  <input type="text" formControlName="awayTeam">-->
+<!--  <input type="text" formControlName="stadium">-->
+<!--  <input type="text" formControlName="result">-->
+<!--  <input type="text" formControlName="judge">-->
+<!--</form>-->
+<form id="matchForm" [formGroup]="form" (ngSubmit)="submitForm()">
+  <label for="judgeId">Judge ID:</label>
+  <select id="judgeId" name="judgeId" formControlName="judge">
+    <option *ngFor="let judge of judges" value="{{judge.id}}">{{judge.firstName}}</option>
+  </select>
+  <br>
+
+  <label for="stadiumId">Stadium ID:</label>
+  <select id="stadiumId" name="stadiumId" formControlName="stadium">
+    <option value="{{stadium.id}}" *ngFor="let stadium of  stadiums">{{stadium.Name}}</option>
+    <option value="3" >aTTEST</option>
+  </select>
+  <br>
+
+  <label for="seasonId">Season ID:</label>
+  <select id="seasonId" name="seasonId" formControlName="season">
+    <option value="{{season.id}}" *ngFor="let season of seasons">{{season.yearStarted+" "+season.leagueName}}</option>
+  </select>
+  <br>
+
+  <label for="homeTeam">Home Team:</label>
+  <select id="homeTeam" name="homeTeam" formControlName="homeTeam">
+    <option value="{{team.id}}" *ngFor="let team of teams">{{team.name}} {{team.yearLeague}}</option>
+  </select>
+  <br>
+
+  <label for="awayTeam">Away Team:</label>
+  <select id="awayTeam" name="awayTeam" formControlName="awayTeam">
+    <option value="{{team.id}}" *ngFor="let team of teams">{{team.name}} {{team.yearLeague}}</option>
+  </select>
+  <br>
+
+  <label for="matchDate">Match Date:</label>
+  <input type="date" id="matchDate" name="matchDate" formControlName="date">
+  <br>
+
+  <input type="submit" value="Submit">
+</form>

@@ -1,7 +1,9 @@
 package com.example.bettingsystem.repository;
 
+import com.example.bettingsystem.views.PlayersView;
 import com.example.bettingsystem.views.TicketBet;
 import com.example.bettingsystem.views.TicketBetView;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
@@ -14,7 +16,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @Repository
-public interface TicketBetViewRepository extends PagingAndSortingRepository<TicketBetView, Long> {
+public interface TicketBetViewRepository extends PagingAndSortingRepository<TicketBetView, Long>, JpaRepository<TicketBetView,Long> {
 
     @Procedure("ticket_bets_search")
     void callTicketBetsSearch(@Param("ticketid") Long ticketId);

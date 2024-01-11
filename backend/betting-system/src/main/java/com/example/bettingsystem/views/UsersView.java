@@ -1,15 +1,15 @@
 package com.example.bettingsystem.views;
 
 import com.example.bettingsystem.model.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(schema = "public", name = "users")
-public class UsersView extends BaseEntity {
+public class UsersView {
+    @Id
+    private Long id;
 
     @Column(name = "first_name")
     public String firstName;
@@ -35,4 +35,7 @@ public class UsersView extends BaseEntity {
     @Column(name = "gender")
     public String gender;
 
+    public Long getId() {
+        return id;
+    }
 }

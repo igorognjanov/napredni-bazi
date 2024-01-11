@@ -1,11 +1,12 @@
 package com.example.bettingsystem.views;
 
-import com.example.bettingsystem.model.BaseEntity;
 import jakarta.persistence.*;
 
 @Entity
 @Table(schema = "public", name = "tikets_status")
-public class TicketStatusView extends BaseEntity {
+public class TicketStatusView {
+    @Id
+    private Long id;
 
     @Column(name = "state")
     public String state;
@@ -25,4 +26,7 @@ public class TicketStatusView extends BaseEntity {
     @Column(name = "stake")
     public String stake;
 
+    public Long getId() {
+        return id;
+    }
 }
