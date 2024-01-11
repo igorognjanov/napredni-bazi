@@ -63,6 +63,11 @@ public class BetsViewController {
         return matchesRepository.findAll(PageRequest.of(page, 50));
     }
 
+//    @GetMapping("/matches/{search-string}")
+//    public Page<MatchesView> searchMatches(@RequestParam(defaultValue = "1") int page, @PathVariable(value = "search-string") String text) {
+//        return matchesRepository.findAllByAwayTeamOrHomeTeam(text, PageRequest.of(page, 50));
+//    }
+
     @PostMapping("/match")
     public void saveMatch(@RequestBody MatchRequest request) {
         matchesRepository.insertMatchFunction(request.judge,request.stadium, request.season, request.homeTeam,request.awayTeam, request.date);
@@ -81,7 +86,7 @@ public class BetsViewController {
     @GetMapping("/matches/team/{team}")
     public Page<MatchesView> getAllMatchesForTeam(@PathVariable(value = "team") String team,
                                                   @RequestParam(defaultValue = "1") int page) {
-        Pageable pageable = PageRequest.of(page - 1, 50); // Subtract 1 from page because it is 0-based
+        Pageable pageable = PageRequest.of(page , 50); // Subtract 1 from page because it is 0-based
         return matchesRepository.findAllByHomeTeamLikeOrAwayTeamLike(team, team, pageable);
     }
 
@@ -165,7 +170,7 @@ public class BetsViewController {
         ticketBetViewRepository.callTicketBetsSearch(id);
         List<TicketBet> ticketBets = ticketBetRepository.findByTiketId(id);
         List<Long> tiketBetIds = ticketBets.stream().map(TicketBet::getId).collect(Collectors.toList());
-        return ticketBetViewRepository.findAllByTiketIdIn(tiketBetIds);
+        return ticketBetViewRepository.findAllByIdIn(tiketBetIds);
     }
 
 }

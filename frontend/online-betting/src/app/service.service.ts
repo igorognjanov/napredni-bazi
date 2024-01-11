@@ -18,7 +18,7 @@ export class ServiceService {
 
   getMatchesForTeam(team: string, page: number): Observable<any> {
     const params = new HttpParams().set('page', page.toString());
-    return this.http.get<any>(`api/matches/${team}`, {params});
+    return this.http.get<any>(`api/matches/team/${team}`, {params});
   }
 
   getAllTicketStatuses(page:number): Observable<any> {

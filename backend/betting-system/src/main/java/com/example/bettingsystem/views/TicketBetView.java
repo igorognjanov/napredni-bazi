@@ -12,9 +12,6 @@ public class TicketBetView {
     @Id
     public Long id;
 
-    @Column(name = "tiket_id")
-    public Long tiketId;
-
     @Column(name = "coefficient")
     public Double coefficient;
 

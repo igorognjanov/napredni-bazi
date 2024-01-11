@@ -14,7 +14,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Date;
 
 public interface MatchesRepository extends PagingAndSortingRepository<MatchesView, Long>, JpaRepository<MatchesView,Long> {
-    Page<MatchesView> findAllByHomeTeamLikeOrAwayTeamLike(String homeTeam, String awayTeam, Pageable pageable);
+    Page<MatchesView> findAllByHomeTeamLikeOrAwayTeamLike(String s,String ss, Pageable pageable);
 
     @Transactional
     @Query(value = "SELECT insert_match_function(:p_judgeid, :p_stadiumid, :p_seasonid, :p_hometeam, :p_awayteam, :p_date)", nativeQuery = true)

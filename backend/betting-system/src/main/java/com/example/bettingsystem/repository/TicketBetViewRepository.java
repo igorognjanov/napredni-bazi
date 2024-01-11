@@ -21,5 +21,5 @@ public interface TicketBetViewRepository extends PagingAndSortingRepository<Tick
     @Procedure("ticket_bets_search")
     void callTicketBetsSearch(@Param("ticketid") Long ticketId);
 
-    List<TicketBetView> findAllByTiketIdIn(List<Long> id);
+    List<TicketBetView> findAllByIdIn(List<Long> id);
 }
