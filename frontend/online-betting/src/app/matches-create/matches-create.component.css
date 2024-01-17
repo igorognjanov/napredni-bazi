@@ -1,78 +1,55 @@
-/* In your component's CSS file or style section */
-.match-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 columns with equal width */
-  gap: 20px; /* Adjust the gap between cells as needed */
-  justify-content: center; /* Center the grid horizontally */
-}
-
-.match-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 15px;
-  border: 1px solid #ddd;
+/* Apply some basic styling to the form container */
+#matchForm {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f9f9f9;
 }
 
-.teams {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.home-team, .away-team {
+/* Style labels to make them more readable */
+label {
+  display: block;
+  margin-bottom: 5px;
   font-weight: bold;
-  margin: 0 5px;
 }
 
-.vs {
-  margin: 0 10px;
-  font-weight: bold;
-  color: #555;
-}
-
-.result {
-  margin-top: 10px;
-  font-weight: bold;
-  color: #007bff; /* Blue color for win, you can change it based on your design */
-}
-
-.details {
-  margin-top: 10px;
-  text-align: center;
-}
-
-.date, .league {
-  color: #888;
-}
-
-
-/* In your component's CSS file or style section */
-.search-container {
-  display: flex;
-  margin-bottom: 20px;
-}
-
-input[type="text"] {
-  flex: 1; /* Take up the remaining space */
+/* Style select boxes to make them more visually appealing */
+select {
+  width: 100%;
   padding: 8px;
-  font-size: 14px;
-  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
   border-radius: 4px;
+  background-color: #fff;
+  font-size: 14px;
 }
 
-button {
-  padding: 8px 16px;
+/* Style date input */
+input[type="date"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
   font-size: 14px;
-  background-color: #007bff;
-  color: #fff;
+}
+
+/* Style submit button */
+input[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 16px;
 }
 
-button:hover {
-  background-color: #0056b3;
+input[type="submit"]:hover {
+  background-color: #45a049;
 }

@@ -17,8 +17,7 @@
 
   <label for="stadiumId">Stadium ID:</label>
   <select id="stadiumId" name="stadiumId" formControlName="stadium">
-    <option value="{{stadium.id}}" *ngFor="let stadium of  stadiums">{{stadium.Name}}</option>
-    <option value="3" >aTTEST</option>
+    <option *ngFor="let stadium of stadiums" value="{{stadium.id}}">{{stadium.name}}</option>
   </select>
   <br>
 

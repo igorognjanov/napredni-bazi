@@ -28,7 +28,7 @@ export interface Coach {
 
 export interface Stadium {
   id: number;
-  "Name": string;
+  name: string;
   "Location": string;
 }
 

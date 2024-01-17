@@ -8,6 +8,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/napredni_bazi
     username: postgres
     password: password
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      jdbc:
+        time_zone: UTC

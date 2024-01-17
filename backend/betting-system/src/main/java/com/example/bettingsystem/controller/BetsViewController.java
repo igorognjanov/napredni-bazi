@@ -9,12 +9,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin("https://localhost:8081")
+@CrossOrigin("https://localhost:8080")
 public class BetsViewController {
 
     public TicketBetRepository ticketBetRepository;
@@ -75,10 +76,10 @@ public class BetsViewController {
 
     @PostMapping("/ticket")
     public void saveTicket(@RequestBody TicketRequest request) {
-        Integer tiketId = ticketBetRepository.insertTicketFunction(request.stake,0,0,5);
+        Integer tiketId = ticketBetRepository.insertTicketFunction(request.stake, 0, 0, 5);
         for (Integer bet :
                 request.bets) {
-            ticketBetRepository.insertTicketBetFunction(tiketId,bet);
+            ticketBetRepository.insertTicketBetFunction(tiketId, bet);
         }
     }
 
@@ -86,7 +87,7 @@ public class BetsViewController {
     @GetMapping("/matches/team/{team}")
     public Page<MatchesView> getAllMatchesForTeam(@PathVariable(value = "team") String team,
                                                   @RequestParam(defaultValue = "1") int page) {
-        Pageable pageable = PageRequest.of(page , 50); // Subtract 1 from page because it is 0-based
+        Pageable pageable = PageRequest.of(page, 50); // Subtract 1 from page because it is 0-based
         return matchesRepository.findAllByHomeTeamLikeOrAwayTeamLike(team, team, pageable);
     }
 
@@ -123,8 +124,8 @@ public class BetsViewController {
 
     @GetMapping("/teams-list")
     public Page<TeamsView> getAllTeamsList() {
-        Pageable pageable = PageRequest.of(1, 10);
-        return teamsViewRepository.findAll(pageable);
+//        Pageable pageable = PageRequest.of(1, 10);
+        return teamsViewRepository.findAll(PageRequest.of(1,20));
     }
 
     @GetMapping("/judges-list")
@@ -144,10 +145,10 @@ public class BetsViewController {
         Pageable pageable = PageRequest.of(1, 10);
         return seasonsViewRepository.findAll(pageable);
     }
+
     @GetMapping("/stadium-list")
-    public Page<StadiumView> getAllStadiumList() {
-        Pageable pageable = PageRequest.of(1, 10);
-        return stadiumViewRepository.findAll(pageable);
+    public Page<StadiumView> getAllStadiumList(@RequestParam(defaultValue = "0") int page) {
+        return stadiumViewRepository.findAll(PageRequest.of(page, 20));
     }
 
     @GetMapping("/ticket-bets")
