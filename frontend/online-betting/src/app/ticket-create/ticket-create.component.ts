@@ -4,6 +4,7 @@ import { PaginationService } from '../pagination.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import {FormBuilder, FormsModule, UntypedFormGroup, Validators} from "@angular/forms";
 import {Bets, Coach, Judge, MatchRequest, Season, Stadium, Team} from "../interface/interface";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-matches-view',
@@ -20,7 +21,8 @@ export class TicketCreateComponent implements OnInit {
     private service: ServiceService,
     private paginationService: PaginationService,
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private _snackBar: MatSnackBar
   ) {
   }
 
@@ -38,6 +40,19 @@ export class TicketCreateComponent implements OnInit {
   }
 
   submitForm() {
-    this.service.saveTicket({bets: this.form.get('bets')!!.value,stake: this.form.get('stake')!!.value}).subscribe()
+    this.service.saveTicket({bets: this.form.get('bets')!!.value,stake: this.form.get('stake')!!.value}).subscribe({
+        next: () => {
+          this._snackBar.open("Successfully saved", "Close", {
+            duration: 2000, // Duration in milliseconds
+          });
+          this.form.reset()
+        },
+        error:()=>{
+          this._snackBar.open("Error", "Close", {
+            duration: 2000, // Duration in milliseconds
+          });
+        }
+      }
+    )
   }
 }

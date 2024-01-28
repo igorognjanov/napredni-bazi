@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -29,6 +30,7 @@ public class BetsViewController {
     public TicketStatusViewRepository ticketStatusViewRepository;
     public UserViewRepository userViewRepository;
     public StadiumViewRepository stadiumViewRepository;
+    public MatchRepository matchRepository;
 
     public BetsViewController(
             BetsViewRepository betsViewRepository,
@@ -42,7 +44,8 @@ public class BetsViewController {
             TicketStatusViewRepository ticketStatusViewRepository,
             UserViewRepository userViewRepository,
             TicketBetRepository ticketBetRepository,
-            StadiumViewRepository stadiumViewRepository
+            StadiumViewRepository stadiumViewRepository,
+            MatchRepository matchRepository
     ) {
         this.betsViewRepository = betsViewRepository;
         this.coachesViewRepository = coachesViewRepository;
@@ -56,11 +59,24 @@ public class BetsViewController {
         this.userViewRepository = userViewRepository;
         this.ticketBetRepository = ticketBetRepository;
         this.stadiumViewRepository = stadiumViewRepository;
+        this.matchRepository = matchRepository;
     }
 
     @GetMapping("/matches")
     public Page<MatchesView> getAllMatches(@RequestParam(defaultValue = "1") int page) {
         return matchesRepository.findAll(PageRequest.of(page, 50));
+    }
+
+    @GetMapping("/match/{id}")
+    public Optional<MatchesView> getMatcheById(@PathVariable Long id) {
+        return matchesRepository.findById(id);
+    }
+
+    @PutMapping("/match/{id}")
+    public void updateState(@PathVariable Long id,@RequestBody String state) {
+        Match match = matchRepository.findById(id).get();
+        match.result = state;
+        matchRepository.save(match);
     }
 
 //    @GetMapping("/matches/{search-string}")

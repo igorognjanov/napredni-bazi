@@ -15,6 +15,8 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { NavComponent } from './nav/nav.component';
 import {MatchesCreateComponent} from "./matches-create/matches-create.component";
 import {TicketCreateComponent} from "./ticket-create/ticket-create.component";
+import {UpdateMatchComponent} from "./update-match/update-match.component";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import {TicketCreateComponent} from "./ticket-create/ticket-create.component";
     PaginationComponent,
     NavComponent,
     MatchesCreateComponent,
-    TicketCreateComponent
+    TicketCreateComponent,
+    UpdateMatchComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +38,8 @@ import {TicketCreateComponent} from "./ticket-create/ticket-create.component";
     BrowserAnimationsModule,
     MatPaginatorModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
