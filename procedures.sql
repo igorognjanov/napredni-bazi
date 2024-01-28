@@ -24,11 +24,6 @@ select *
 from tiket;
 CALL ticket_bets_search(409409);
 
-select * from tiket where id = 409409;
-select * from tiketbet where tiketid = 409409;
-select * from tiketbet where id in (1085721,1085722,1085723);
-select * from bettingcoefficients where id in (58791,29209,111888);
-
 
 
 --

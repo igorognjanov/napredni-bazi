@@ -1,3 +1,77 @@
+-- CREATE OR REPLACE FUNCTION fill_random_person_data()
+--     RETURNS VOID AS
+-- $$
+-- DECLARE
+--     first_names VARCHAR[] := ARRAY ['Eliot', 'John', 'Emma', 'Sophia', 'Michael', 'Olivia', 'William', 'Ava'];
+--     last_names  VARCHAR[] := ARRAY ['Doull', 'Smith', 'Johnson', 'Williams', 'Jones', 'Brown', 'Davis', 'Miller'];
+--     genders     VARCHAR[] := ARRAY ['Male', 'Female'];
+-- BEGIN
+--     FOR i IN 1..100 -- Change the loop count based on your needs
+--         LOOP
+--             INSERT INTO person(first_name, last_name, date_of_birth, email, gender_id, location_id)
+--             VALUES (first_names[1 + floor(random() * array_length(first_names, 1))],
+--                     last_names[1 + floor(random() * array_length(last_names, 1))],
+--                     '2/6/1998',
+--                     'email@example.com', -- Replace with a proper email generation logic
+--                     (select id from gender where name = 'Male'), (select id from location order by random() limit 1));
+--         END LOOP;
+-- END;
+-- $$
+--     LANGUAGE plpgsql;
+-- select * from fill_random_person_data();
+-- select * from person;
+
+insert into bettingcombinations(name)
+values ('1'),
+       ('x'),
+       ('2'),
+       ('1-1'),
+       ('2-2'),
+       ('x-x'),
+       ('x-1'),
+       ('x-x'),
+       ('1-x'),
+       ('1-2'),
+       ('2-1'),
+       ('2-2'),
+       ('2-x');
+
+
+insert into role
+values (1, 'user');
+
+
+
+CREATE OR REPLACE FUNCTION fill_person_data(num_rows integer)
+    RETURNS void AS
+$$
+DECLARE
+    first_name_chars text[] := ARRAY ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+    last_name_chars  text[] := ARRAY ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+BEGIN
+    FOR i IN 1..num_rows
+        LOOP
+            INSERT INTO Person (first_name, last_name, date_of_birth, email, location_id, gender_id)
+            VALUES ((SELECT array_to_string(
+                                    ARRAY(SELECT first_name_chars[1 + (random() * 26)] FROM generate_series(1, 5)),
+                                    '')),
+                    (SELECT array_to_string(
+                                    ARRAY(SELECT last_name_chars[1 + (random() * 26)] FROM generate_series(1, 5)), '')),
+                    (SELECT to_date(to_char((date_trunc('year', now()) +
+                                             (random() * (now()::date - date_trunc('year', now())))), 'YYYY-MM-DD'),
+                                    'YYYY-MM-DD')),
+                    (SELECT array_to_string(ARRAY(SELECT substring(md5(random()::text) from 1 for 5)
+                                                  FROM generate_series(1, 2)), '') || '@example.com'),
+                    (SELECT id FROM Location ORDER BY random() LIMIT 1),
+                    (SELECT id FROM Gender ORDER BY random() LIMIT 1));
+        END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT fill_person_data(1000);
+select * from person;
+
+
 CREATE OR REPLACE FUNCTION fill_random_data_for_team()
     RETURNS VOID AS
 $$
@@ -7,8 +81,9 @@ DECLARE
     league_id   BIGINT;
     stadium_id  BIGINT;
 BEGIN
-    FOR i IN 1..1000 LOOP
-            team_name := (select Name from TeamNames order by  random() limit 1);
+    FOR i IN 1..1000
+        LOOP
+            team_name := (select Name from TeamNames order by random() limit 1);
             location_id := (SELECT id FROM Location ORDER BY random() LIMIT 1);
             league_id := (SELECT id FROM League ORDER BY random() LIMIT 1);
             stadium_id := (SELECT id FROM Stadium ORDER BY random() LIMIT 1);
@@ -20,7 +95,11 @@ END;
 $$
     LANGUAGE plpgsql;
 
+
+
 select fill_random_data_for_team();
+select *
+from team;
 
 --------------------------------------------------------------------------------
 
@@ -42,8 +121,10 @@ $$
     LANGUAGE plpgsql;
 
 select fill_random_data_for_judge();
+select * from judge;
 
 -------------------------------------------------------------
+
 CREATE OR REPLACE FUNCTION fill_random_data_for_coach()
     RETURNS VOID AS
 $$
@@ -54,30 +135,31 @@ BEGIN
         LOOP
             person_id := (Select id from person order by random() limit 1);
             INSERT INTO coach(person_id, title)
-            values (person_id,'judge');
+            values (person_id, 'judge');
         end loop;
 END;
 $$
     LANGUAGE plpgsql;
 
 select fill_random_data_for_coach();
+select *
+from coach;
 
 ---
-
-
 
 
 CREATE OR REPLACE FUNCTION fill_random_data_for_team()
     RETURNS VOID AS
 $$
 DECLARE
-    team_name TEXT;
+    team_name   TEXT;
     location_id BIGINT;
-    league_id BIGINT;
-    stadium_id BIGINT;
+    league_id   BIGINT;
+    stadium_id  BIGINT;
 BEGIN
-    FOR i IN 1..1000 LOOP
-            team_name := (select Name from TeamNames order by  random() limit 1);
+    FOR i IN 1..1000
+        LOOP
+            team_name := (select Name from TeamNames order by random() limit 1);
             location_id := (SELECT id FROM Location ORDER BY random() LIMIT 1);
             league_id := (SELECT id FROM League ORDER BY random() LIMIT 1);
             stadium_id := (SELECT id FROM Stadium ORDER BY random() LIMIT 1);
@@ -90,8 +172,8 @@ $$
     LANGUAGE plpgsql;
 
 select fill_random_data_for_team();
-select * from team;
-truncate table team;
+select *
+from team;
 
 
 CREATE OR REPLACE FUNCTION fill_random_data_for_judge()
@@ -111,36 +193,8 @@ $$
     LANGUAGE plpgsql;
 
 select fill_random_data_for_judge();
-select * from judge;
-
-select * from person;
-
-CREATE OR REPLACE FUNCTION fill_person_data(num_rows integer)
-    RETURNS void AS
-$$
-DECLARE
-    first_name_chars text[] := ARRAY['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-    last_name_chars text[] := ARRAY['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-BEGIN
-    FOR i IN 1..num_rows
-        LOOP
-            INSERT INTO Person (first_name, last_name, date_of_birth, email, location_id, gender_id)
-            VALUES (
-                       (SELECT array_to_string(ARRAY(SELECT first_name_chars[1 + (random() * 26)] FROM generate_series(1, 5)), '')),
-                       (SELECT array_to_string(ARRAY(SELECT last_name_chars[1 + (random() * 26)] FROM generate_series(1, 5)), '')),
-                       (SELECT to_date(to_char((date_trunc('year', now()) + (random() * (now()::date - date_trunc('year', now())))), 'YYYY-MM-DD'), 'YYYY-MM-DD')),
-                       (SELECT array_to_string(ARRAY(SELECT substring(md5(random()::text) from 1 for 5) FROM generate_series(1, 2)), '') || '@example.com'),
-                       (SELECT id FROM Location ORDER BY random() LIMIT 1),
-                       (SELECT id FROM Gender ORDER BY random() LIMIT 1)
-                   );
-        END LOOP;
-END;
-$$ LANGUAGE plpgsql;
-
-SELECT fill_person_data(1000);
-select count(*) from person;
-
-
+select *
+from judge;
 
 
 
@@ -161,8 +215,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 select fill_coach_data(1000);
-select *
-from coach;
+select * from coach;
 
 
 
@@ -186,10 +239,32 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-select fill_coach_team_data(100);
+select fill_coach_team_data(1000);
 select *
 from coach_team;
 
+
+CREATE OR REPLACE FUNCTION fill_data_season()
+    RETURNS VOID AS
+$$
+DECLARE
+    l_id bigint;
+    i    int;
+BEGIN
+    FOR l_id IN (select id from league)
+        LOOP
+            for i in 1980..2022
+                loop
+                    insert into season("Year started", leagueid)
+                    values (i::text, l_id);
+                end loop;
+        end loop;
+end;
+$$ LANGUAGE plpgsql;
+
+select fill_data_season();
+select *
+from season;
 
 
 CREATE OR REPLACE FUNCTION fill_matches_data(num_rows integer)
@@ -201,9 +276,9 @@ DECLARE
 BEGIN
     FOR i IN 1..num_rows
         LOOP
-            INSERT INTO Matches (Result, JudgeId, StadiumId, SeasonId, HomeTeam, AwayTeam, "Date")
+            INSERT INTO Matches (Result, JudgeId, StadiumId, SeasonId, HomeTeam, AwayTeam, "Date", Status)
             SELECT CASE floor(random() * 3)
-                       WHEN 0 THEN 'Home Team W`ins'
+                       WHEN 0 THEN 'Home Team Wins'
                        WHEN 1 THEN 'Away Team Wins'
                        WHEN 2 THEN 'Draw'
                        END,
@@ -214,16 +289,17 @@ BEGIN
                    (SELECT id FROM Team ORDER BY random() LIMIT 1),
                    (SELECT to_date(to_char((date_trunc('year', now() - interval '10 years') + (random() *
                                                                                                (now()::date - date_trunc('year', now() - interval '10 years')))),
-                                           'YYYY-MM-DD'), 'YYYY-MM-DD'))
+                                           'YYYY-MM-DD'), 'YYYY-MM-DD')),
+                   'Finished'
             FROM generate_series(1, 1);
         END LOOP;
 END;
 $$ LANGUAGE plpgsql;
 
 
-select fill_matches_data(100);
-select * from matches;
-
+select fill_matches_data(1000);
+select *
+from matches;
 
 
 
@@ -247,7 +323,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-select fill_player_data(100);
+select fill_player_data(1000);
 select *
 from player;
 
@@ -269,7 +345,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-select fill_player_team_data(100);
+select fill_player_team_data(1000);
 select *
 from player_team;
 
@@ -313,13 +389,11 @@ select fill_betting_card_data(100);
 select *
 from bettingcard;
 
-insert into role
-values (1, 'user');
-
 
 
 CREATE OR REPLACE FUNCTION fill_user_data(num_users INTEGER)
-    RETURNS VOID AS $$
+    RETURNS VOID AS
+$$
 DECLARE
     p_id   INTEGER;
     l_id   INTEGER;
@@ -328,7 +402,8 @@ DECLARE
     u_name TEXT;
     p_word TEXT;
 BEGIN
-    FOR i IN 1..num_users LOOP
+    FOR i IN 1..num_users
+        LOOP
             p_id := (SELECT id FROM Person ORDER BY RANDOM() LIMIT 1);
             l_id := (SELECT id FROM Location ORDER BY RANDOM() LIMIT 1);
             r_id := (SELECT id FROM Role ORDER BY RANDOM() LIMIT 1);
@@ -341,22 +416,14 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 select fill_user_data(100);
-select * from "User";
+select *
+from "User";
 
 
-select * from season;
-
-
-
-
-
-
-
-
-
-
-
-
+select *
+from season;
+select *
+from person;
 
 
 
@@ -377,12 +444,10 @@ BEGIN
             for match_id in (select id from matches)
                 loop
                     INSERT INTO BettingCoefficients (Coefficient, State, MatchesId, BettingCombinationsId)
-                    VALUES (
-                               TRUNC((RANDOM() * 10 + 1)::numeric, 2),
-                               (CASE TRUNC((RANDOM() * 2 + 1)::numeric, 0) WHEN 1 THEN 'Active' ELSE 'Inactive' END),
-                               match_id,
-                               combination_id
-                           );
+                    VALUES (TRUNC((RANDOM() * 10 + 1)::numeric, 2),
+                            (CASE TRUNC((RANDOM() * 2 + 1)::numeric, 0) WHEN 1 THEN 'Active' ELSE 'Inactive' END),
+                            match_id,
+                            combination_id);
                 END LOOP;
         END LOOP;
 END;
@@ -394,27 +459,6 @@ select *
 from bettingcoefficients;
 
 
-CREATE OR REPLACE FUNCTION fill_data_season()
-    RETURNS VOID AS
-$$
-DECLARE
-    l_id bigint;
-    i    int;
-BEGIN
-    FOR l_id IN (select id from league)
-        LOOP
-            for i in 1980..2022
-                loop
-                    insert into season("Year started", leagueid)
-                    values (i::text, l_id);
-                end loop;
-        end loop;
-end;
-$$ LANGUAGE plpgsql;
-
-select fill_data_season();
-select *
-from season;
 
 
 CREATE OR REPLACE FUNCTION fill_data_team_season()
@@ -440,49 +484,26 @@ select *
 from team_season;
 
 
-select *
-from team;
-select *
-from season;
-select *
-from league;
-
-
-insert into bettingcombinations(name)
-values ('1'),
-       ('x'),
-       ('2'),
-       ('1-1'),
-       ('2-2'),
-       ('x-x'),
-       ('x-1'),
-       ('x-x'),
-       ('1-x'),
-       ('1-2'),
-       ('2-1'),
-       ('2-2'),
-       ('2-x');
-
-
 
 CREATE OR REPLACE FUNCTION fill_betting_coefficients_data(num_rows integer)
-    RETURNS void AS $$
+    RETURNS void AS
+$$
 BEGIN
-    FOR i IN 1..num_rows LOOP
+    FOR i IN 1..num_rows
+        LOOP
             INSERT INTO BettingCoefficients (Coefficient, State, MatchesId, BettingCombinationsId)
-            VALUES (
-                       round((RANDOM() * 10 + 1)::numeric, 2),
-                       'NOT YET PLAYED',
-                       (SELECT id FROM Matches ORDER BY RANDOM() LIMIT 1),
-                       (SELECT id FROM BettingCombinations ORDER BY RANDOM() LIMIT 1)
-                   );
+            VALUES (round((RANDOM() * 10 + 1)::numeric, 2),
+                    'NOT YET PLAYED',
+                    (SELECT id FROM Matches ORDER BY RANDOM() LIMIT 1),
+                    (SELECT id FROM BettingCombinations ORDER BY RANDOM() LIMIT 1));
         END LOOP;
 END;
 $$ LANGUAGE plpgsql;
 
 
 select fill_betting_coefficients_data(100);
-select * from bettingcoefficients;
+select *
+from bettingcoefficients;
 
 --======================================================
 
@@ -529,8 +550,8 @@ $$ LANGUAGE plpgsql;
 
 
 select fill_tiket_data(10000);
-select * from tiket;
-truncate tiket cascade ;
+select *
+from tiket;
 
 --=====================================
 
@@ -544,16 +565,18 @@ BEGIN
     FOR tiket_id IN (select id from tiket)
         LOOP
             insert into tiketbet(tiketid, bettingcoefficientsid)
-            select tiket_id, id from bettingcoefficients order by random() limit round(random() * 3 + 4);
+            select tiket_id, id
+            from bettingcoefficients
+            order by random()
+            limit round(random() * 3 + 4);
         END LOOP;
 END;
 $$ LANGUAGE plpgsql;
 
 
 select fill_tiket_bet_data();
-select * from tiketbet;
-truncate tiketbet;
-
+select *
+from tiketbet;
 
 
 create or replace function on_tiket_bet_insert() returns trigger AS
@@ -579,7 +602,7 @@ create trigger on_tiket_bet_insert
     for each row
 execute function on_tiket_bet_insert();
 
-drop trigger on_tiket_bet_insert on tiketbet;
+-- drop trigger on_tiket_bet_insert on tiketbet;
 
 
 create or replace function on_tiket_bet_delete() returns trigger AS
@@ -633,7 +656,7 @@ create trigger on_betting_coefficient_update
     for each row
 execute function on_betting_coefficient_update();
 
-drop trigger on_betting_coefficient_update on bettingcoefficients;
+-- drop trigger on_betting_coefficient_update on bettingcoefficients;
 
 
 

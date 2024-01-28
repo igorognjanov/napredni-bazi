@@ -1,6 +1,6 @@
 create table Gender
 (
-    id   serial not null primary key ,
+    id   serial not null primary key,
     name text
 
 );
@@ -16,19 +16,19 @@ CREATE TABLE Location
 
 create table Person
 (
-    id            bigserial not null primary key ,
+    id            bigserial not null primary key,
     first_name    text,
     last_name     text,
     date_of_birth date,
     email         text,
-    location_id   bigint not null references Location(id),
-    gender_id     int    not null references Gender (id)
+    location_id   bigint    not null references Location (id),
+    gender_id     int       not null references Gender (id)
 );
 
 CREATE TABLE BettingCard
 (
-    Id         BIGSERIAL NOT NULL,
-    TotalMoney bigint,
+    Id          BIGSERIAL NOT NULL,
+    TotalMoney  bigint,
     DebitCardId bigint    NOT NULL,
     PRIMARY KEY (Id)
 );
@@ -43,8 +43,8 @@ CREATE TABLE BettingCoefficients
 );
 CREATE TABLE BettingCombinations
 (
-    Id                    BIGSERIAL NOT NULL,
-    Name                  text,
+    Id   BIGSERIAL NOT NULL,
+    Name text,
     PRIMARY KEY (Id)
 );
 CREATE TABLE Coach
@@ -64,10 +64,10 @@ CREATE TABLE Coach_Team
 );
 CREATE TABLE DebitCard
 (
-    Id               BIGSERIAL NOT NULL,
-    Issue            bigint,
-    DateOfExpire     date,
-    "Column"         bigint,
+    Id           BIGSERIAL NOT NULL,
+    Issue        bigint,
+    DateOfExpire date,
+    "Column"     bigint,
 --     "Betting CardId" bigint    NOT NULL,
     PRIMARY KEY (Id)
 );
@@ -101,6 +101,7 @@ CREATE TABLE Matches
     HomeTeam  bigint    NOT NULL,
     AwayTeam  bigint    NOT NULL,
     "Date"    date      NOT NULL,
+    Status    text,
     PRIMARY KEY (Id)
 );
 CREATE TABLE Player
@@ -108,7 +109,7 @@ CREATE TABLE Player
     Id         BIGSERIAL NOT NULL,
     person_id  bigint    not null references Person (id),
     TeamId     bigint    NOT NULL,
-    PositionId text    NOT NULL,
+    PositionId text      NOT NULL,
     LocationId bigint    NOT NULL,
     PRIMARY KEY (Id)
 );

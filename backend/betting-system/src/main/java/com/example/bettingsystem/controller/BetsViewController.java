@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,9 +68,14 @@ public class BetsViewController {
 //        return matchesRepository.findAllByAwayTeamOrHomeTeam(text, PageRequest.of(page, 50));
 //    }
 
+//    @GetMapping("/matches/team-like/{team}")
+//    public List<MatchesView> findAllMatchesByTeamNameLike(@PathVariable(value = "team")){
+//        List<Long> teamsIds = teamRepository.findAll();
+//    }
+
     @PostMapping("/match")
     public void saveMatch(@RequestBody MatchRequest request) {
-        matchesRepository.insertMatchFunction(request.judge,request.stadium, request.season, request.homeTeam,request.awayTeam, request.date);
+        matchesRepository.insertMatchFunction(request.judge, request.stadium, request.season, request.homeTeam, request.awayTeam, request.date);
     }
 
     @PostMapping("/ticket")
@@ -130,13 +134,13 @@ public class BetsViewController {
 
     @GetMapping("/judges-list")
     public Page<JudgesView> getAllJudgesList() {
-        Pageable pageable = PageRequest.of(1, 10);
+        Pageable pageable = PageRequest.of(1, 20);
         return judgesViewRepository.findAll(pageable);
     }
 
     @GetMapping("/coaches-list")
     public Page<CoachesView> getAllCoachesList() {
-        Pageable pageable = PageRequest.of(1, 10);
+        Pageable pageable = PageRequest.of(1, 20);
         return coachesViewRepository.findAll(pageable);
     }
 

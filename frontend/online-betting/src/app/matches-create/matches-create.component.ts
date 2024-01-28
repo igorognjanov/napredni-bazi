@@ -1,8 +1,8 @@
 import {Component, HostListener, OnInit} from '@angular/core';
-import { ServiceService } from '../service.service';
-import { PaginationService } from '../pagination.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
+import {ServiceService} from '../service.service';
+import {PaginationService} from '../pagination.service';
+import {ActivatedRoute, ParamMap} from '@angular/router';
+import {switchMap} from 'rxjs/operators';
 import {FormBuilder, FormsModule, UntypedFormGroup, Validators} from "@angular/forms";
 import {Coach, Judge, MatchRequest, Season, Stadium, Team} from "../interface/interface";
 
@@ -14,11 +14,11 @@ import {Coach, Judge, MatchRequest, Season, Stadium, Team} from "../interface/in
 export class MatchesCreateComponent implements OnInit {
   form: UntypedFormGroup = this._formDefinition
 
-  judges : Judge[] = []
-  seasons : Season[] = []
-  teams : Team[] = []
-  coaches :Coach[] = []
-  stadiums :Stadium[] = []
+  judges: Judge[] = []
+  seasons: Season[] = []
+  teams: Team[] = []
+  coaches: Coach[] = []
+  stadiums: Stadium[] = []
 
   constructor(
     private service: ServiceService,
@@ -45,7 +45,10 @@ export class MatchesCreateComponent implements OnInit {
   ngOnInit(): void {
     this.service.getAllJudges().subscribe((value) => this.judges = value.content)
     this.service.getAllSeasons().subscribe((value) => this.seasons = value.content)
-    this.service.getAllTeams().subscribe((value) => this.teams = value.content)
+    this.service.getAllTeams().subscribe((value) => {
+      this.teams = value.content
+      console.log(value.content)
+    })
     this.service.getAllCoaches().subscribe((value) => this.coaches = value.content)
     this.service.getAllStadiums().subscribe((value) => this.stadiums = value.content)
     // this.route.queryParamMap
@@ -79,7 +82,7 @@ export class MatchesCreateComponent implements OnInit {
   // }
 
   submitForm() {
-    console.log( this.form)
+    console.log(this.form)
     const matchRequest: MatchRequest = {
       judge: this.form.get('judge')!!.value,
       stadium: this.form.get('stadium')!!.value,
