@@ -1,0 +1,28 @@
+<div>
+  <h2>Match Details</h2>
+  <p><strong>Home Team:</strong> {{ match.homeTeam }}</p>
+  <p><strong>Away Team:</strong> {{ match.awayTeam }}</p>
+  <p><strong>Stadium:</strong> {{ match.stadium }}</p>
+  <p><strong>Result:</strong> {{ match.result }}</p>
+  <p><strong>Judge:</strong> {{ match.judge }}</p>
+  <p><strong>Date:</strong> {{ match.date }}</p>
+  <p><strong>League:</strong> {{ match.league }}</p>
+  <p><strong>League Year:</strong> {{ match.leagueYear }}</p>
+</div>
+
+
+<form id="matchForm" [formGroup]="form" (ngSubmit)="submitForm()">
+  <label for="status">State:</label>
+  <select id="status" name="status" formControlName="status">
+    <option value="Home Team Wins">Home Team Wins</option>
+    <option value="Away Team Wins">Away Team Wins</option>
+    <option value="Draw">Draw</option>
+  </select>
+  <br>
+
+<!--  <label for="result">Result:</label>-->
+<!--  <input type="text" name="result" id="result" formControlName="result">-->
+<!--  <br>-->
+
+  <input type="submit" value="Update">
+</form>

@@ -7,6 +7,7 @@ import {HomeComponent} from "./home/home.component";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatchesCreateComponent} from "./matches-create/matches-create.component";
 import {TicketCreateComponent} from "./ticket-create/ticket-create.component";
+import {UpdateMatchComponent} from "./update-match/update-match.component";
 
 const routes: Routes = [
   {path: 'matches-view', component: MatchesViewComponent},
@@ -14,6 +15,7 @@ const routes: Routes = [
   {path: 'ticket-create', component: TicketCreateComponent},
   {path: 'tikets-status', component: TiketsStatusComponent},
   {path: 'tiket-bets/:id', component: TicketBetComponent},
+  {path: 'open-match', component: UpdateMatchComponent},
   {path: '**', component: HomeComponent}
 ]
 

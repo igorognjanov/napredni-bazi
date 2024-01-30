@@ -5,6 +5,7 @@ import {ActivatedRoute, ParamMap} from '@angular/router';
 import {switchMap} from 'rxjs/operators';
 import {FormBuilder, FormsModule, UntypedFormGroup, Validators} from "@angular/forms";
 import {Coach, Judge, MatchRequest, Season, Stadium, Team} from "../interface/interface";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-matches-view',
@@ -24,7 +25,8 @@ export class MatchesCreateComponent implements OnInit {
     private service: ServiceService,
     private paginationService: PaginationService,
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private _snackBar: MatSnackBar
   ) {
   }
 
@@ -91,6 +93,19 @@ export class MatchesCreateComponent implements OnInit {
       awayTeam: this.form.get('awayTeam')!!.value,
       date: this.form.get('date')!!.value,
     };
-    this.service.saveMatch(matchRequest).subscribe()
+    this.service.saveMatch(matchRequest).subscribe({
+        next: () => {
+          this._snackBar.open("Successfully saved", "Close", {
+            duration: 2000, // Duration in milliseconds
+          });
+          this.form.reset()
+        },
+        error:()=>{
+          this._snackBar.open("Error", "Close", {
+            duration: 2000, // Duration in milliseconds
+          });
+        }
+      }
+    )
   }
 }

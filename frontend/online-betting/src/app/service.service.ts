@@ -16,6 +16,14 @@ export class ServiceService {
     return this.http.get<any>(`api/matches`, {params});
   }
 
+  getMatch(id: any): Observable<any> {
+    return this.http.get<any>(`api/match/${id}`);
+  }
+
+  updateMatchStatus(id: any, state: any): Observable<any> {
+    return this.http.put<any>(`api/match/${id}`, state);
+  }
+
   getMatchesForTeam(team: string, page: number): Observable<any> {
     const params = new HttpParams().set('page', page.toString());
     return this.http.get<any>(`api/matches/team/${team}`, {params});

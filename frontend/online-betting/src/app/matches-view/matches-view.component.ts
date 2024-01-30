@@ -4,6 +4,7 @@ import { PaginationService } from '../pagination.service';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import {FormsModule} from "@angular/forms";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-matches-view',
@@ -56,4 +57,10 @@ export class MatchesViewComponent implements OnInit {
   addTicket() {
     this.router.navigate(["/ticket-create"])
   }
+
+    openMatch(id: number) {
+        this.router.navigate(["/open-match"],{
+            queryParams: { id: id }
+        })
+    }
 }
