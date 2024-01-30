@@ -1,25 +1,21 @@
 package com.example.bettingsystem.views;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
-
 @Entity
-@Table(schema = "public", name = "matches")
+@Table(name = "Matches")
 public class Match {
 
     @Id
     public Long id;
 
     @Column(name = "hometeam")
-    public String homeTeam;
+    public Long homeTeam;
 
     @Column(name = "awayteam")
-    public String awayTeam;
+    public Long awayTeam;
 
     @Column(name = "stadiumid")
     public Long stadium;
@@ -30,8 +26,8 @@ public class Match {
     @Column(name = "judgeid")
     public Long judge;
 
-    @Column(name = "Date")
-    public Date Date;
+    @Column(name = "match_date")
+    public Date date;
 
     public Long getId() {
         return id;
