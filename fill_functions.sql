@@ -276,7 +276,7 @@ DECLARE
 BEGIN
     FOR i IN 1..num_rows
         LOOP
-            INSERT INTO Matches (Result, JudgeId, StadiumId, SeasonId, HomeTeam, AwayTeam, "Date", Status)
+            INSERT INTO Matches (Result, JudgeId, StadiumId, SeasonId, HomeTeam, AwayTeam, match_date, Status)
             SELECT CASE floor(random() * 3)
                        WHEN 0 THEN 'Home Team Wins'
                        WHEN 1 THEN 'Away Team Wins'
@@ -660,46 +660,57 @@ execute function on_betting_coefficient_update();
 
 
 
--- create or replace function on_matches_update() returns trigger AS
--- $$
--- declare
---     ticket     record;
---     ticket_bet record;
---     ticket_won boolean;
---     result     text;
--- begin
---     if (old.result != new.result)
---     then
---         ticket_won = true;
---         for ticket in (select t.*
---                        from bettingcoefficients bc
---                                 join tiketbet tb on bc.id = tb.bettingcoefficientsid
---                                 join tiket t on tb.tiketid = t.id
---                        where matchesid = old.id)
---             loop
---                 ticket_won := true;
---                 for ticket_bet in (select * from tiketbet where tiketid = ticket.id)
---                     loop
---                         result := (select m.result
---                                    from bettingcoefficients bc
---                                             join matches m on m.id = bc.matchesid
---                                    where bc.id = ticket_bet.bettingcoefficientsid);
---                         case when (result = 'Home Team Wins') then
---                             when (result = 'Away Team Wins') then
---                             when (result = 'Draw') then ''
---                             end
---                     end loop;
---                 update tiket set state = ''
---
---             end loop;
---     end if;
--- end;
--- $$ language plpgsql;
---
--- create trigger on_matches_update
---     after update
---     on matches
---     for each row
--- execute function on_matches_update();
---
--- drop trigger on_matches_update on matches;
+CREATE OR REPLACE FUNCTION on_matches_update()
+RETURNS TRIGGER AS
+$$
+DECLARE
+    ticket     RECORD;
+    ticket_bet RECORD;
+    ticket_won BOOLEAN;
+    result     TEXT;
+BEGIN
+    IF (OLD.result != NEW.result) THEN
+        ticket_won := true;
+        FOR ticket IN (SELECT t.*
+                       FROM bettingcoefficients bc
+                                JOIN ticketbet tb ON bc.id = tb.bettingcoefficientsid
+                                JOIN ticket t ON tb.ticketid = t.id
+                       WHERE matchesid = OLD.id)
+        LOOP
+            ticket_won := true;
+            FOR ticket_bet IN (SELECT * FROM ticketbet WHERE ticketid = ticket.id)
+            LOOP
+                result := (SELECT m.result
+                           FROM bettingcoefficients bc
+                                    JOIN matches m ON m.id = bc.matchesid
+                           WHERE bc.id = ticket_bet.bettingcoefficientsid);
+                
+                -- Fix the syntax of CASE statement
+                CASE
+                    WHEN result = 'Home Team Wins' THEN
+                        -- Update ticket state accordingly
+                        UPDATE ticket SET state = 'SomeState' WHERE id = ticket.id;
+                    WHEN result = 'Away Team Wins' THEN
+                        -- Update ticket state accordingly
+                        UPDATE ticket SET state = 'SomeState' WHERE id = ticket.id;
+                    WHEN result = 'Draw' THEN
+                        -- Update ticket state accordingly
+                        UPDATE ticket SET state = 'SomeState' WHERE id = ticket.id;
+                    ELSE
+                        -- Handle other cases if necessary
+                        NULL;
+                END CASE;
+            END LOOP;
+        END LOOP;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+
+create trigger on_matches_update
+    after update
+    on matches
+    for each row
+execute function on_matches_update();
+
+drop trigger on_matches_update on matches;

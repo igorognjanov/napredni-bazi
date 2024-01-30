@@ -5,7 +5,7 @@ select m.id                  as id,
        s.name                as stadium,
        m.result              as result,
        jp.first_name         as judge,
-       m."Date"              as date,
+       m.match_date              as date,
        l.name                as league,
        season."Year started" as league_year
 from matches m
@@ -25,7 +25,7 @@ from matches m
 --        b.coefficient        as coefficient,
 --        th.name              as homeTeam,
 --        ta.name              as awayTeam,
---        m."Date"             as date,
+--        m.match_date             as date,
 --        bcm.name             as combination
 -- from tiket t
 --          join tiketbet tb on t.id = tb.tiketid
@@ -41,7 +41,7 @@ select tb.id         as id,
        b.coefficient as coefficient,
        th.name       as homeTeam,
        ta.name       as awayTeam,
-       m."Date"      as date,
+       m.match_date      as date,
        bcm.name      as combination
 -- from tiket t
 --          join tiketbet tb on t.id = tb.tiketid
@@ -69,7 +69,7 @@ select *
 --        bc.coefficient as coefficient,
 --        th.name        as homeTeam,
 --        ta.name        as awayTeam,
---        m."Date"       as date,
+--        m.match_date       as date,
 --        bcm.name       as combination,
 --        u.username     as username
 from tiket t
@@ -134,7 +134,7 @@ select b.id          as id,
        b.coefficient as coefficient,
        b.state       as state,
        m.result      as result,
-       m."Date"      as date
+       m.match_date      as date
 from bettingcoefficients b
          join bettingcombinations bc on b.bettingcombinationsid = bc.id
          join matches m on b.matchesid = m.id
@@ -163,7 +163,7 @@ select t.id    as id,
        s.name  as stadium
 from team t
          join location lo on t.location_id = lo.id
-         join stadium s on t.stadiumid = s.id
+         join stadium s on t.stadiumid = s.id;
 --          join team_season ts on t.id = ts.teamid;
 
 

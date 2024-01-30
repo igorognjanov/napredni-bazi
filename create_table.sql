@@ -100,7 +100,7 @@ CREATE TABLE Matches
     SeasonId  bigint    NOT NULL,
     HomeTeam  bigint    NOT NULL,
     AwayTeam  bigint    NOT NULL,
-    "Date"    date      NOT NULL,
+    match_date    date      NOT NULL,
     Status    text,
     PRIMARY KEY (Id)
 );

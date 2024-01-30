@@ -3,18 +3,33 @@ CREATE OR REPLACE FUNCTION insert_team_function(p_result text, p_judgeId int, p_
     RETURNS VOID AS
 $$
 BEGIN
-    insert into matches(result, judgeid, stadiumid, seasonid, hometeam, awayteam, "Date")
+    insert into matches(result, judgeid, stadiumid, seasonid, hometeam, awayteam, match_date)
     values (p_result, p_judgeId, p_stadiumId, p_seasonId, p_homeTeamId, p_awayTeamId, p_date);
 END
 $$
     LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION insert_ticket_function(p_stake text, p_return text, p_odd text, p_userid int)
+CREATE OR REPLACE FUNCTION insert_ticket_function(p_stake int, p_return int, p_odd int, p_userid int)
+    RETURNS INT AS
+$$
+DECLARE
+    new_ticket_id INT;
+BEGIN
+    INSERT INTO tiket(stake, "Return", odd, state, userid)
+    VALUES (p_stake, 0, p_odd, 'Created', p_userid)
+    RETURNING id INTO new_ticket_id;
+
+    RETURN new_ticket_id;
+END
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION insert_ticketBet_function(p_tiketId int, p_betId int)
     RETURNS VOID AS
 $$
 BEGIN
-    insert into tiket(stake, "Return", odd, state, userid)
-    values (p_stake, p_return, p_odd, 'Created', p_userid);
+    insert into tiketbet(tiketid, bettingcoefficientsid) 
+    VALUES (p_tiketId, p_betId); 
 END
 $$
     LANGUAGE plpgsql;
@@ -66,7 +81,7 @@ CREATE OR REPLACE FUNCTION insert_match_function(p_judgeid int, p_stadiumid int,
     RETURNS VOID AS
 $$
 BEGIN
-    insert into matches (result, judgeid, stadiumid, seasonid, hometeam, awayteam, "Date")
+    insert into matches (result, judgeid, stadiumid, seasonid, hometeam, awayteam, match_date)
     values (null, p_judgeid, p_stadiumid, p_seasonid, p_hometeam, p_awayteam, p_date);
 END
 $$
