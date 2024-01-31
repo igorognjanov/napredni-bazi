@@ -54,10 +54,6 @@ export class MatchesViewComponent implements OnInit {
     this.router.navigate(["/matches-create"])
   }
 
-  addTicket() {
-    this.router.navigate(["/ticket-create"])
-  }
-
     openMatch(id: number) {
         this.router.navigate(["/open-match"],{
             queryParams: { id: id }

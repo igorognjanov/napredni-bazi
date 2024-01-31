@@ -1,4 +1,6 @@
-<input type="text" [(ngModel)]="searchUsername" placeholder="Search by Username">
+<span class="search-container">
+  <button (click)="addTicket()">Add Ticket</button>
+</span>
 
 <div *ngFor="let tiket of data" (click)="openTiket(tiket.id)">
   <b>Id:</b>{{tiket.id}}&nbsp; <b>TiketUsername:</b> {{tiket.username}}&nbsp; <b>Status:</b>{{tiket.state}}&nbsp;

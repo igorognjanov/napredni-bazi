@@ -52,6 +52,7 @@
 /* In your component's CSS file or style section */
 .search-container {
   display: flex;
+  justify-content: end;
   margin-bottom: 20px;
 }
 

@@ -167,7 +167,7 @@ public class BetsViewController {
     }
 
     @GetMapping("/stadium-list")
-    public Page<StadiumView> getAllStadiumList(@RequestParam(defaultValue = "0") int page) {
+    public Page<StadiumView> getAllStadiumList(@RequestParam(defaultValue = "1") int page) {
         return stadiumViewRepository.findAll(PageRequest.of(page-1, 20));
     }
 
