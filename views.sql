@@ -46,7 +46,7 @@ select tb.id         as id,
 -- from tiket t
 --          join tiketbet tb on t.id = tb.tiketid
 from tiketbet tb
-         join tiket t on tb.id = t.id
+         join tiket t on tb.tiketid = t.id
          join bettingcoefficients b on tb.bettingcoefficientsid = b.id
          join matches m on b.matchesid = m.id
          join team ta on m.awayteam = ta.id
