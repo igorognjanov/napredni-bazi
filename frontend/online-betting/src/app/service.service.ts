@@ -70,4 +70,8 @@ export class ServiceService {
   return this.http.post<any>(`api/ticket`,request)
 }
 
+  getTicket(id:number):Observable<any>{
+  return this.http.get(`api/ticket/${id}`)
+}
+
 }

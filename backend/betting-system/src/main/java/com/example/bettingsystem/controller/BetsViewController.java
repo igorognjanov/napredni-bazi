@@ -178,7 +178,12 @@ public class BetsViewController {
 
     @GetMapping("/ticket-status")
     public Page<TicketStatusView> getAllTicketStatus(@RequestParam(defaultValue = "1") int page) {
-        return ticketStatusViewRepository.findAll(PageRequest.of(page-1, 50));
+        return ticketStatusViewRepository.findAll(PageRequest.of(page - 1, 50));
+    }
+
+    @GetMapping("/ticket/{id}")
+    public Optional<TicketStatusView> getTicketById(@PathVariable Long id) {
+        return ticketStatusViewRepository.findById(id);
     }
 
     @GetMapping("/users")

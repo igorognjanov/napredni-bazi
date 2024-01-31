@@ -12,6 +12,7 @@ export class TicketBetComponent implements OnInit {
   id: number = 0;
 
   tiket: any;
+  ticketObject: any;
 
   constructor(private route: ActivatedRoute,
               private service: ServiceService) {
@@ -25,5 +26,7 @@ export class TicketBetComponent implements OnInit {
       console.log(data)
       this.tiket = data
     });
+
+    this.service.getTicket(this.id).subscribe(value => this.ticketObject = value)
   }
 }
