@@ -2,7 +2,7 @@ import {Component, HostListener, OnInit} from '@angular/core';
 import {ServiceService} from '../service.service';
 import {PaginationService} from '../pagination.service';
 import {ActivatedRoute, ParamMap} from '@angular/router';
-import {switchMap} from 'rxjs/operators';
+import {switchMap, tap} from 'rxjs/operators';
 import {FormBuilder, FormsModule, UntypedFormGroup, Validators} from "@angular/forms";
 import {Coach, Judge, MatchRequest, Season, Stadium, Team} from "../interface/interface";
 import {of} from "rxjs";
@@ -17,6 +17,7 @@ export class UpdateMatchComponent implements OnInit {
   form: UntypedFormGroup = this._formDefinition
 
   match: any
+  id: number = 0
 
   constructor(
     private service: ServiceService,
@@ -33,6 +34,7 @@ export class UpdateMatchComponent implements OnInit {
         })
       ).subscribe((match) => {
         this.match = match;
+        this.id = match.id
       });
   }
 
@@ -54,6 +56,9 @@ export class UpdateMatchComponent implements OnInit {
             duration: 2000, // Duration in milliseconds
           });
           this.form.reset()
+          this.service.getMatch(this.id).subscribe((match) => {
+            this.match = match;
+          });
         },
         error:()=>{
           this._snackBar.open("Error", "Close", {

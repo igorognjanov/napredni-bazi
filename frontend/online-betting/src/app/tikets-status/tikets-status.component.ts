@@ -45,5 +45,9 @@ export class TiketsStatusComponent implements OnInit {
     this.router.navigate(['/tiket-bets', tiketId]);
   }
 
+  addTicket() {
+    this.router.navigate(["/ticket-create"])
+  }
+
 
 }
