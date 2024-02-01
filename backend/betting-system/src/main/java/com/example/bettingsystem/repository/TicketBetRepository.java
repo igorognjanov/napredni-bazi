@@ -32,4 +32,6 @@ public interface TicketBetRepository extends JpaRepository<TicketBet, Long> {
             @Param("p_tiketId") Integer p_tiketId,
             @Param("p_betId") Integer p_betId
     );
+
+    List<TicketBet> findAllByBettingCoefficientsIdIn(List<Long> bettingCoefficientIds);
 }

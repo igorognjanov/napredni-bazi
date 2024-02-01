@@ -31,6 +31,7 @@ public class BetsViewController {
     public UserViewRepository userViewRepository;
     public StadiumViewRepository stadiumViewRepository;
     public MatchRepository matchRepository;
+    public BettingCoefficientsRepository bettingCoefficientsRepository;
 
     public BetsViewController(
             BetsViewRepository betsViewRepository,
@@ -45,7 +46,8 @@ public class BetsViewController {
             UserViewRepository userViewRepository,
             TicketBetRepository ticketBetRepository,
             StadiumViewRepository stadiumViewRepository,
-            MatchRepository matchRepository
+            MatchRepository matchRepository,
+            BettingCoefficientsRepository bettingCoefficientsRepository
     ) {
         this.betsViewRepository = betsViewRepository;
         this.coachesViewRepository = coachesViewRepository;
@@ -60,6 +62,7 @@ public class BetsViewController {
         this.ticketBetRepository = ticketBetRepository;
         this.stadiumViewRepository = stadiumViewRepository;
         this.matchRepository = matchRepository;
+        this.bettingCoefficientsRepository = bettingCoefficientsRepository;
     }
 
     @GetMapping("/matches")
@@ -77,6 +80,12 @@ public class BetsViewController {
         Match match = matchRepository.findById(id).get();
         match.result = state;
         matchRepository.save(match);
+        List<Long> betComb = this.bettingCoefficientsRepository.findAllByMatchesId(id).stream().map(BettingCoefficient::getId).collect(Collectors.toList());
+
+        ticketBetRepository.findAllByBettingCoefficientsIdIn(betComb)
+                .stream()
+                .map(TicketBet::getTiketId)
+                .forEach(ticketId -> ticketBetViewRepository.callTicketBetsSearch(ticketId));
     }
 
 //    @GetMapping("/matches/{search-string}")
@@ -193,7 +202,7 @@ public class BetsViewController {
 
     @GetMapping("/ticket-bets-search/{id}")
     public List<TicketBetView> getTicketBetsForTiket(@PathVariable("id") Long id) {
-        ticketBetViewRepository.callTicketBetsSearch(id);
+//        ticketBetViewRepository.callTicketBetsSearch(id);
         List<TicketBet> ticketBets = ticketBetRepository.findByTiketId(id);
         List<Long> tiketBetIds = ticketBets.stream().map(TicketBet::getId).collect(Collectors.toList());
         return ticketBetViewRepository.findAllByIdIn(tiketBetIds);
