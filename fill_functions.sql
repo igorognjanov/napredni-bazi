@@ -664,53 +664,42 @@ CREATE OR REPLACE FUNCTION on_matches_update()
 RETURNS TRIGGER AS
 $$
 DECLARE
-    ticket     RECORD;
     ticket_bet RECORD;
-    ticket_won BOOLEAN;
     result     TEXT;
 BEGIN
     IF (OLD.result != NEW.result) THEN
-        ticket_won := true;
-        FOR ticket IN (SELECT t.*
-                       FROM bettingcoefficients bc
-                                JOIN ticketbet tb ON bc.id = tb.bettingcoefficientsid
-                                JOIN ticket t ON tb.ticketid = t.id
-                       WHERE matchesid = OLD.id)
-        LOOP
-            ticket_won := true;
-            FOR ticket_bet IN (SELECT * FROM ticketbet WHERE ticketid = ticket.id)
-            LOOP
-                result := (SELECT m.result
+        FOR ticket_bet IN (SELECT tb.*
                            FROM bettingcoefficients bc
-                                    JOIN matches m ON m.id = bc.matchesid
-                           WHERE bc.id = ticket_bet.bettingcoefficientsid);
-                
-                -- Fix the syntax of CASE statement
-                CASE
-                    WHEN result = 'Home Team Wins' THEN
-                        -- Update ticket state accordingly
-                        UPDATE ticket SET state = 'SomeState' WHERE id = ticket.id;
-                    WHEN result = 'Away Team Wins' THEN
-                        -- Update ticket state accordingly
-                        UPDATE ticket SET state = 'SomeState' WHERE id = ticket.id;
-                    WHEN result = 'Draw' THEN
-                        -- Update ticket state accordingly
-                        UPDATE ticket SET state = 'SomeState' WHERE id = ticket.id;
-                    ELSE
-                        -- Handle other cases if necessary
-                        NULL;
-                END CASE;
-            END LOOP;
+                                    JOIN ticketbet tb ON bc.id = tb.bettingcoefficientsid
+                           WHERE bc.matchesid = OLD.id)
+        LOOP
+            result := (SELECT m.result
+                       FROM bettingcoefficients bc
+                                JOIN matches m ON m.id = bc.matchesid
+                       WHERE bc.id = ticket_bet.bettingcoefficientsid);
+            
+
+            UPDATE ticket
+            SET state = 
+                CASE result
+                    WHEN 'Home Team Wins' THEN 'SomeState1'
+                    WHEN 'Away Team Wins' THEN 'SomeState2'
+                    WHEN 'Draw' THEN 'SomeState3'
+                    ELSE 'SomeDefaultState'
+                END
+            WHERE id = ticket_bet.ticketid;
         END LOOP;
     END IF;
+    RETURN NEW;
+EXCEPTION
+    WHEN others THEN
+        RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE TRIGGER on_matches_update
+AFTER UPDATE ON matches
+FOR EACH ROW
+EXECUTE FUNCTION on_matches_update();
 
-create trigger on_matches_update
-    after update
-    on matches
-    for each row
-execute function on_matches_update();
 
-drop trigger on_matches_update on matches;
