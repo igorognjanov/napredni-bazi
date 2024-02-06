@@ -9,3 +9,50 @@ isplaten(dodadi vo baza)
 8-> da moze da se vnese tiketbet so koeficienti za sekoja kombinacija
 9-> koga ke go pogledne tiketot da se vrsi update na tiketstatus
 10->
+
+-- Step 1: Create the new partitioned table
+CREATE TABLE Matches_new
+(
+    Id        BIGSERIAL NOT NULL,
+    Result    text,
+    JudgeId   bigint    NOT NULL,
+    StadiumId bigint    NOT NULL,
+    SeasonId  bigint    NOT NULL,
+    HomeTeam  bigint    NOT NULL,
+    AwayTeam  bigint    NOT NULL,
+    match_date    date      NOT NULL,
+    Status    text,
+    PRIMARY KEY (Id, SeasonId, match_date)
+)
+    PARTITION BY RANGE (SeasonId, match_date);
+
+-- Create partitions for existing data
+CREATE TABLE Matches_La_Liga PARTITION OF Matches_new
+    FOR VALUES FROM (86, '2022-09-01') TO (86, '2023-07-31');
+-- Create more partitions as needed...
+select *
+from season where "Year started"='2022';--43-86
+
+select *
+from league where id in (120, 121);--English Premier League and La Liga
+-- Step 2: Move data from existing table to new partitions
+INSERT INTO Matches_new
+SELECT * FROM Matches;
+
+-- Step 3: Rename tables
+ALTER TABLE Matches RENAME TO Matches_old;
+ALTER TABLE Matches_new RENAME TO Matches;
+
+select TABLEOID,*
+from Matches;
+
+select *
+from Matches_old;
+
+-- Step 4: Create constraints and indexes on the new table
+-- Add primary key constraint if not already present
+-- Add foreign key constraints if needed
+-- Add indexes as needed
+
+-- Drop the old table if no longer needed
+DROP TABLE Matches_old;
