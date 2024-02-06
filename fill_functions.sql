@@ -463,6 +463,7 @@ from bettingcoefficients;
 
 
 
+
 CREATE OR REPLACE FUNCTION fill_data_team_season()
     RETURNS VOID AS
 $$

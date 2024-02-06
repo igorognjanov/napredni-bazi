@@ -7,7 +7,6 @@ import com.example.bettingsystem.views.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -68,7 +67,7 @@ public class BetsViewController {
 
     @GetMapping("/matches")
     public Page<MatchesView> getAllMatches(@RequestParam(defaultValue = "1") int page) {
-        return matchesRepository.findAll(PageRequest.of(page - 1, 50));
+        return matchesRepository.findAll(PageRequest.of(page - 1, 50,  Sort.by(Sort.Order.desc("id"))));
     }
 
     @GetMapping("/match/{id}")
@@ -184,7 +183,7 @@ public class BetsViewController {
 
     @GetMapping("/ticket-bets")
     public Page<TicketBetView> getAllTicketBets(@RequestParam(defaultValue = "1") int page) {
-        return ticketBetViewRepository.findAll(PageRequest.of(page - 1, 50));
+        return ticketBetViewRepository.findAll(PageRequest.of(page-1, 50, Sort.by(Sort.Order.desc("id"))));
     }
 
     @GetMapping("/ticket-status")
