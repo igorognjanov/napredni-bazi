@@ -46,10 +46,10 @@ export class MatchesCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.service.getAllJudges().subscribe((value) => this.judges = value.content)
-    this.service.getAllSeasons().subscribe((value) => this.seasons = value.content)
+    this.service.getAllSeasons().subscribe((value) => this.seasons = value)
     this.service.getAllTeams().subscribe((value) => {
-      this.teams = value.content
-      console.log(value.content)
+      this.teams = value
+      console.log(value)
     })
     this.service.getAllCoaches().subscribe((value) => this.coaches = value.content)
     this.service.getAllStadiums().subscribe((value) => this.stadiums = value.content)
