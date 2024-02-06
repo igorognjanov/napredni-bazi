@@ -14,6 +14,8 @@ export class TicketBetComponent implements OnInit {
   tiket: any;
   ticketObject: any;
 
+  returnWin: number = 0;
+
   constructor(private route: ActivatedRoute,
               private service: ServiceService) {
   }
@@ -26,7 +28,17 @@ export class TicketBetComponent implements OnInit {
       console.log(data)
       this.tiket = data
     });
+    this.service.getTicket(this.id).subscribe(value => {
+      this.ticketObject = value
+      if (this.ticketObject.state === 'true') {
+        this.ticketObject.state = 'Won'
+      } else {
+        this.ticketObject.state = 'Lost'
+      }
 
-    this.service.getTicket(this.id).subscribe(value => this.ticketObject = value)
+      if (this.ticketObject.state == 'Won') {
+        this.returnWin = Number(this.ticketObject.stake) * Number(this.ticketObject.odd);
+      }
+    })
   }
 }

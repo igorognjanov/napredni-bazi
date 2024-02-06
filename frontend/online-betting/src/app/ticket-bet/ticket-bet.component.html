@@ -3,11 +3,12 @@
   <p><strong>Stake:</strong>   {{ticketObject.stake}}</p>
   <p><strong>Odd:</strong> {{ticketObject.odd}}</p>
   <p><strong>State:</strong> {{ticketObject.state}}</p>
-  <p><strong>Return:</strong> {{ticketObject.total_return}}</p>
+  <p><strong>Return:</strong> {{this.returnWin}}</p>
 </div>
 <div>
   <h2>Ticket Bets</h2>
   <div *ngFor="let tiketbet of tiket">
-    {{tiketbet.homeTeam}} vs {{tiketbet.awayTeam}} {{tiketbet.date | date}} combination:{{tiketbet.combination}} Coefficient: {{tiketbet.coefficient}}
+    {{tiketbet.homeTeam}} vs {{tiketbet.awayTeam}} {{tiketbet.date | date}} combination:{{tiketbet.combination}}
+    Coefficient: {{tiketbet.coefficient}}
   </div>
 </div>

@@ -69,7 +69,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 SELECT fill_person_data(1000);
-select * from person;
+select *
+from person;
 
 
 CREATE OR REPLACE FUNCTION fill_random_data_for_team()
@@ -121,7 +122,8 @@ $$
     LANGUAGE plpgsql;
 
 select fill_random_data_for_judge();
-select * from judge;
+select *
+from judge;
 
 -------------------------------------------------------------
 
@@ -215,7 +217,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 select fill_coach_data(1000);
-select * from coach;
+select *
+from coach;
 
 
 
@@ -460,7 +463,6 @@ from bettingcoefficients;
 
 
 
-
 CREATE OR REPLACE FUNCTION fill_data_team_season()
     RETURNS VOID AS
 $$
@@ -542,7 +544,8 @@ BEGIN
             select random() * 10000 + 10,
                    0,
                    1,
-                   (CASE TRUNC((RANDOM() * 2 + 1)::numeric, 0) WHEN 1 THEN 'Won' ELSE 'Lost' END),
+--                    (CASE TRUNC((RANDOM() * 2 + 1)::numeric, 0) WHEN 1 THEN 'Won' ELSE 'Lost' END),
+                   'unknown',
                    (select id from "User" order by random() limit 1);
         END LOOP;
 END;
@@ -659,7 +662,6 @@ execute function on_betting_coefficient_update();
 -- drop trigger on_betting_coefficient_update on bettingcoefficients;
 
 
-
 CREATE OR REPLACE FUNCTION on_matches_update()
 RETURNS TRIGGER AS
 $$
@@ -684,7 +686,7 @@ BEGIN
                            FROM bettingcoefficients bc
                                     JOIN matches m ON m.id = bc.matchesid
                            WHERE bc.id = ticket_bet.bettingcoefficientsid);
-                
+
                 -- Fix the syntax of CASE statement
                 CASE
                     WHEN result = 'Home Team Wins' THEN
@@ -713,4 +715,37 @@ create trigger on_matches_update
     for each row
 execute function on_matches_update();
 
-drop trigger on_matches_update on matches;
+-- drop trigger on_matches_update on matches;
+
+
+CREATE OR REPLACE FUNCTION createBettingCoefficients()
+    RETURNS TRIGGER AS
+$$
+DECLARE
+    matchId       bigint;
+    combinationId bigint;
+BEGIN
+    -- Get the newly inserted match id
+    matchId := NEW.Id;
+
+    -- Insert betting coefficients for all possible combinations
+    FOR combinationId IN (SELECT Id FROM BettingCombinations)
+        LOOP
+            INSERT INTO BettingCoefficients (Coefficient, State, MatchesId, BettingCombinationsId)
+            VALUES (TRUNC((RANDOM() * 10 + 1)::numeric, 2),
+                    ('new created'),
+                    matchId,
+                    combinationId);
+        END LOOP;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER trigger_createBettingCoefficients
+    AFTER INSERT
+    ON Matches
+    FOR EACH ROW
+EXECUTE FUNCTION createBettingCoefficients();
+

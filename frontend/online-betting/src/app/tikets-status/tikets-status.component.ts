@@ -11,7 +11,7 @@ import {EMPTY} from "rxjs";
   styleUrls: ['./tikets-status.component.css']
 })
 export class TiketsStatusComponent implements OnInit {
-  data: any[] = [];
+  data: any;
   searchUsername: string = '';
   page: number = 1;
 

@@ -15,7 +15,8 @@ from matches m
          join judge j on j.id = m.judgeid
          join person jp on j.person_id = jp.id
          join season on m.seasonid = season.id
-         join league l on season.leagueid = l.id;
+         join league l on season.leagueid = l.id
+order by id desc ;
 
 
 -- drop view ticket_bet_view;
@@ -140,7 +141,7 @@ from bettingcoefficients b
          join matches m on b.matchesid = m.id
          join team th on m.hometeam = th.id
          join team ta on m.awayteam = ta.id
-order by date desc;
+order by id desc;
 
 create or replace view teams_seasons as
 select t.id                  as id,
@@ -194,4 +195,4 @@ select t.id       as id,
        t.stake    as stake
 from "User" u
          join tiket t on u.id = t.userid
-order by id asc;
+order by id desc ;

@@ -7,6 +7,7 @@ import com.example.bettingsystem.views.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -67,7 +68,7 @@ public class BetsViewController {
 
     @GetMapping("/matches")
     public Page<MatchesView> getAllMatches(@RequestParam(defaultValue = "1") int page) {
-        return matchesRepository.findAll(PageRequest.of(page-1, 50));
+        return matchesRepository.findAll(PageRequest.of(page - 1, 50));
     }
 
     @GetMapping("/match/{id}")
@@ -76,7 +77,7 @@ public class BetsViewController {
     }
 
     @PutMapping("/match/{id}")
-    public void updateState(@PathVariable Long id,@RequestBody String state) {
+    public void updateState(@PathVariable Long id, @RequestBody String state) {
         Match match = matchRepository.findById(id).get();
         match.result = state;
         matchRepository.save(match);
@@ -116,45 +117,46 @@ public class BetsViewController {
     @GetMapping("/matches/team/{team}")
     public Page<MatchesView> getAllMatchesForTeam(@PathVariable(value = "team") String team,
                                                   @RequestParam(defaultValue = "1") int page) {
-        Pageable pageable = PageRequest.of(page-1, 50); // Subtract 1 from page because it is 0-based
+        Pageable pageable = PageRequest.of(page - 1, 50); // Subtract 1 from page because it is 0-based
         return matchesRepository.findAllByHomeTeamLikeOrAwayTeamLike(team, team, pageable);
     }
 
 
     @GetMapping("/coaches")
     public Page<CoachesView> getAllCoaches(@RequestParam(defaultValue = "1") int page) {
-        return coachesViewRepository.findAll(PageRequest.of(page-1, 50));
+        return coachesViewRepository.findAll(PageRequest.of(page - 1, 50));
     }
 
     @GetMapping("/judges")
     public Page<JudgesView> getAllJudges(@RequestParam(defaultValue = "1") int page) {
-        return judgesViewRepository.findAll(PageRequest.of(page-1, 50));
+        return judgesViewRepository.findAll(PageRequest.of(page - 1, 50));
     }
 
     @GetMapping("/bets")
     public Page<BetsView> getAllBets(@RequestParam(defaultValue = "1") int page) {
-        return betsViewRepository.findAll(PageRequest.of(page-1, 50));
+//        return betsViewRepository.findAll(PageRequest.of(page-1, 50));
+        return betsViewRepository.findAll(PageRequest.of(page - 1, 500, Sort.by(Sort.Order.desc("id"))));
     }
 
     @GetMapping("/players")
     public Page<PlayersView> getAllPlayers(@RequestParam(defaultValue = "1") int page) {
-        return playersViewRepository.findAll(PageRequest.of(page-1, 50));
+        return playersViewRepository.findAll(PageRequest.of(page - 1, 50));
     }
 
     @GetMapping("/seasons")
     public Page<SeasonsView> getAllSeasons(@RequestParam(defaultValue = "1") int page) {
-        return seasonsViewRepository.findAll(PageRequest.of(page-1, 50));
+        return seasonsViewRepository.findAll(PageRequest.of(page - 1, 50));
     }
 
     @GetMapping("/teams")
     public Page<TeamsView> getAllTeams(@RequestParam(defaultValue = "1") int page) {
-        return teamsViewRepository.findAll(PageRequest.of(page-1, 50));
+        return teamsViewRepository.findAll(PageRequest.of(page - 1, 50));
     }
 
     @GetMapping("/teams-list")
     public Page<TeamsView> getAllTeamsList() {
 //        Pageable pageable = PageRequest.of(1, 10);
-        return teamsViewRepository.findAll(PageRequest.of(1,20));
+        return teamsViewRepository.findAll(PageRequest.of(1, 20));
     }
 
     @GetMapping("/judges-list")
@@ -177,12 +179,12 @@ public class BetsViewController {
 
     @GetMapping("/stadium-list")
     public Page<StadiumView> getAllStadiumList(@RequestParam(defaultValue = "1") int page) {
-        return stadiumViewRepository.findAll(PageRequest.of(page-1, 20));
+        return stadiumViewRepository.findAll(PageRequest.of(page - 1, 20));
     }
 
     @GetMapping("/ticket-bets")
     public Page<TicketBetView> getAllTicketBets(@RequestParam(defaultValue = "1") int page) {
-        return ticketBetViewRepository.findAll(PageRequest.of(page-1, 50));
+        return ticketBetViewRepository.findAll(PageRequest.of(page - 1, 50));
     }
 
     @GetMapping("/ticket-status")
@@ -197,12 +199,12 @@ public class BetsViewController {
 
     @GetMapping("/users")
     public Page<UsersView> getAllUsers(@RequestParam(defaultValue = "1") int page) {
-        return userViewRepository.findAll(PageRequest.of(page-1, 50));
+        return userViewRepository.findAll(PageRequest.of(page - 1, 50));
     }
 
     @GetMapping("/ticket-bets-search/{id}")
     public List<TicketBetView> getTicketBetsForTiket(@PathVariable("id") Long id) {
-//        ticketBetViewRepository.callTicketBetsSearch(id);
+        ticketBetViewRepository.callTicketBetsSearch(id);
         List<TicketBet> ticketBets = ticketBetRepository.findByTiketId(id);
         List<Long> tiketBetIds = ticketBets.stream().map(TicketBet::getId).collect(Collectors.toList());
         return ticketBetViewRepository.findAllByIdIn(tiketBetIds);
