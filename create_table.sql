@@ -91,6 +91,19 @@ CREATE TABLE League
     PRIMARY KEY (Id)
 );
 
+-- CREATE TABLE Matches
+-- (
+--     Id        BIGSERIAL NOT NULL,
+--     Result    text,
+--     JudgeId   bigint    NOT NULL,
+--     StadiumId bigint    NOT NULL,
+--     SeasonId  bigint    NOT NULL,
+--     HomeTeam  bigint    NOT NULL,
+--     AwayTeam  bigint    NOT NULL,
+--     match_date    date      NOT NULL,
+--     Status    text,
+--     PRIMARY KEY (Id)
+-- );
 CREATE TABLE Matches
 (
     Id        BIGSERIAL NOT NULL,
@@ -102,8 +115,23 @@ CREATE TABLE Matches
     AwayTeam  bigint    NOT NULL,
     match_date    date      NOT NULL,
     Status    text,
-    PRIMARY KEY (Id)
-);
+    PRIMARY KEY (Id, match_date)
+)
+    PARTITION BY RANGE (match_date);
+drop table Matches;
+select * from Matches;
+-- Create partitions for existing data
+CREATE TABLE Matches_2023_Minus PARTITION OF Matches
+    FOR VALUES FROM (MINVALUE ) TO ('2023-01-01');
+CREATE TABLE Matches_2023 PARTITION OF Matches
+    FOR VALUES FROM ('2023-01-01') TO ('2023-12-31');
+CREATE TABLE Matches_2024 PARTITION OF Matches
+    FOR VALUES FROM ('2024-01-01') TO ('2024-12-31');
+CREATE TABLE Matches_2025 PARTITION OF Matches
+    FOR VALUES FROM ('2025-01-01') TO ('2025-12-31');
+CREATE TABLE Matches_2025_Plus PARTITION OF Matches
+    FOR VALUES FROM ('2025-12-31') TO (MAXVALUE );
+
 CREATE TABLE Player
 (
     Id         BIGSERIAL NOT NULL,
