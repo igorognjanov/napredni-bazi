@@ -35,7 +35,7 @@ export class TicketCreateComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.service.getAllBets().subscribe((value) => this.bets = value.content)
+    this.service.getAllBets().subscribe((value) => this.bets = value)
 
   }
 

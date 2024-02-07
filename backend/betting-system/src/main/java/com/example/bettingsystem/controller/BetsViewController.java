@@ -133,9 +133,9 @@ public class BetsViewController {
     }
 
     @GetMapping("/bets")
-    public Page<BetsView> getAllBets(@RequestParam(defaultValue = "1") int page) {
+    public List<BetsView> getAllBets(@RequestParam(defaultValue = "1") int page) {
 //        return betsViewRepository.findAll(PageRequest.of(page-1, 50));
-        return betsViewRepository.findAll(PageRequest.of(page - 1, 500, Sort.by(Sort.Order.desc("id"))));
+        return betsViewRepository.findAll(Sort.by(Sort.Order.desc("id")));
     }
 
     @GetMapping("/players")
@@ -149,14 +149,14 @@ public class BetsViewController {
     }
 
     @GetMapping("/teams")
-    public Page<TeamsView> getAllTeams(@RequestParam(defaultValue = "1") int page) {
-        return teamsViewRepository.findAll(PageRequest.of(page - 1, 50));
+    public List<TeamsView> getAllTeams(@RequestParam(defaultValue = "1") int page) {
+        return teamsViewRepository.findAll();
     }
 
     @GetMapping("/teams-list")
-    public Page<TeamsView> getAllTeamsList() {
+    public List<TeamsView> getAllTeamsList() {
 //        Pageable pageable = PageRequest.of(1, 10);
-        return teamsViewRepository.findAll(PageRequest.of(1, 20));
+        return teamsViewRepository.findAll();
     }
 
     @GetMapping("/judges-list")
@@ -172,9 +172,8 @@ public class BetsViewController {
     }
 
     @GetMapping("/seasons-list")
-    public Page<SeasonsView> getAllSeasonList() {
-        Pageable pageable = PageRequest.of(1, 10);
-        return seasonsViewRepository.findAll(pageable);
+    public List<SeasonsView> getAllSeasonList() {
+        return seasonsViewRepository.findAllByYearStarted("2022");
     }
 
     @GetMapping("/stadium-list")
