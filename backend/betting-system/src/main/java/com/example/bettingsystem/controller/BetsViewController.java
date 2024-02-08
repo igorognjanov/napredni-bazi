@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -106,6 +107,7 @@ public class BetsViewController {
 
     @PostMapping("/ticket")
     public void saveTicket(@RequestBody TicketRequest request) {
+//        Integer odd = betsViewRepository.findAllByIdIn(request.bets).stream().map(betsView -> betsView.coefficient).reduce(1.0,(a, b) -> a * b).intValue();
         Integer tiketId = ticketBetRepository.insertTicketFunction(request.stake, 0, 0, 5);
         for (Integer bet :
                 request.bets) {

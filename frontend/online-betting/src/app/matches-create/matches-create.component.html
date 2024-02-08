@@ -23,7 +23,7 @@
 
   <label for="seasonId">Season:</label>
   <select id="seasonId" name="seasonId" formControlName="season">
-    <option value="{{season.id}}" *ngFor="let season of seasons">{{season.yearStarted+" "+season.leagueName}}</option>
+    <option value="{{season.id}}" *ngFor="let season of seasons">{{season.leagueName}}</option>
   </select>
   <br>
 
